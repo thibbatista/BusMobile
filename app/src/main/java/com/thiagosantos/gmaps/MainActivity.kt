@@ -49,27 +49,42 @@ class MainActivity() : AppCompatActivity() {
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
             addMarkers(googleMap)
+
+            googleMap.setOnMapLoadedCallback {
+                val bounds = LatLngBounds.builder()
+
+                places.observe(this){ place ->
+                    place.forEach { l ->
+                        l.vs.forEach{ vs->
+                            bounds.include(LatLng(vs.py, vs.px))
+                        }
+
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(),100))
+                    }
+                }
+
+            }
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            autenticaKeyApi()
+            authKeyApi()
 
         }
 
-        pegaRespostaApi()
+        getPosition()
 
     }
 
 
-    private suspend fun autenticaKeyApi() {
+    private suspend fun authKeyApi() {
         try {
-            val resposta = ApiService.autenticar()
-            val biscoitinho = resposta.headers().get("Set-Cookie")
-            biscoitinho?.let {
-                ApiService.setCookie(biscoitinho)
+            val response = ApiService.autenticar()
+            val cookie = response.headers().get("Set-Cookie")
+            cookie?.let {
+                ApiService.setCookie(cookie)
             } ?: Log.d(TAG, "Veio sem cookie")
 
-            Log.d(TAG, "headers-debug: $biscoitinho")
+            Log.d(TAG, "headers-debug: $cookie")
             Log.d(TAG, "API autenticada")
         } catch (e: Exception) {
             Log.d(TAG, "API fora do ar: " + e.message)
@@ -77,18 +92,16 @@ class MainActivity() : AppCompatActivity() {
     }
 
 
-    private fun pegaRespostaApi() {
+    private fun getPosition() {
         lifecycleScope.launch {
-            val resposta = ApiService.getPosicoes()
+            val response = ApiService.getPosicoes()
 
-            if (resposta.isSuccessful) {
-                val response = resposta.body()
-                if (response != null) {
-                    localizacaoVeiculos?.invoke(response)
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    places.postValue(body.l)
 
-                    places.postValue(response.l)
-
-                    Log.d(ContentValues.TAG, "onCreate-> Teste saída: $response.l")
+                    Log.d(ContentValues.TAG, "onCreate-> Teste saída: $body.l")
 
                 }
 
@@ -129,14 +142,21 @@ class MainActivity() : AppCompatActivity() {
 
     private fun addMarkers(googleMap: GoogleMap) {
 
-        places.observe(this){
-            it.forEach { l->
-                l.vs.forEach{ vs->
+        places.observe(this) { place ->
+            place.forEach { l ->
+                l.vs.forEach { vs ->
                     val marker = googleMap.addMarker(
                         MarkerOptions()
                             .title(vs.origem)
                             .snippet(vs.destino)
                             .position(LatLng(vs.py, vs.px))
+                            .icon(
+                                BitmapHelper.vectorToBitmap(
+                                    this,
+                                    R.drawable.ic_baseline_directions_bus_24,
+                                    ContextCompat.getColor(this, R.color.teal_200)
+                                )
+                            )
                     )
                 }
             }
