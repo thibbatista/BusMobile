@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,20 +16,21 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.thiagosantos.gmaps.adapter.MarkerInfoAdapter
 import com.thiagosantos.gmaps.helper.BitmapHelper
+import com.thiagosantos.gmaps.model.L
 import com.thiagosantos.gmaps.services.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity() : AppCompatActivity() {
 
+    private val places = MutableLiveData<List<L>>()
+
     private var localizacaoVeiculos: ((Posicao) -> Unit)? = null
-   // private val context: Context = this
+
     private val TAG = "DEBUG"
 
     override fun onStart() {
         super.onStart()
-
-
 
 
     }
@@ -43,24 +45,18 @@ class MainActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         ApiService.instancia(applicationContext)
 
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map_fragment) as SupportMapFragment
+        mapFragment.getMapAsync { googleMap ->
+            addMarkers(googleMap)
+        }
+
         lifecycleScope.launch(Dispatchers.IO) {
             autenticaKeyApi()
-            pegaRespostaApi()
+
         }
 
-
-
-
-
-
-        //PRINT
-        localizacaoVeiculos = {
-            Log.d(ContentValues.TAG, "onCreate: ${it.l}")
-        }
-
-        mapFragment(this)
-
-
+        pegaRespostaApi()
 
     }
 
@@ -90,7 +86,10 @@ class MainActivity() : AppCompatActivity() {
                 if (response != null) {
                     localizacaoVeiculos?.invoke(response)
 
-                    //mapFragment()
+                    places.postValue(response.l)
+
+                    Log.d(ContentValues.TAG, "onCreate-> Teste saída: $response.l")
+
                 }
 
             }
@@ -99,7 +98,7 @@ class MainActivity() : AppCompatActivity() {
 
     }
 
-    private fun mapFragment(context: Context){
+    private fun mapFragment(context: Context) {
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
@@ -130,32 +129,55 @@ class MainActivity() : AppCompatActivity() {
 
     private fun addMarkers(googleMap: GoogleMap) {
 
-        localizacaoVeiculos = { pos ->
-
-            pos.l.forEach { place ->
-
-                val latLng = place.vs
-                latLng.forEach { vs ->
-
+        places.observe(this){
+            it.forEach { l->
+                l.vs.forEach{ vs->
                     val marker = googleMap.addMarker(
                         MarkerOptions()
-                            .title(place.c)
-                            .snippet(place.lt0)
+                            .title(vs.origem)
+                            .snippet(vs.destino)
                             .position(LatLng(vs.py, vs.px))
-                            .icon(
-                                BitmapHelper.vectorToBitmap(
-                                    this,
-                                    R.drawable.ic_baseline_directions_bus_24,
-                                    ContextCompat.getColor(this, R.color.teal_200)
-                                )
-                            )
                     )
-                    if (marker != null) {
-                        marker.tag = place
-                    }
                 }
             }
-
         }
+
+//        places.forEach { place ->
+//
+//            val latLng = place.vs
+//            latLng.forEach { vs ->
+//
+////                val marker = googleMap.addMarker(
+////                    MarkerOptions()
+////                        .title(place.c)
+////                        .snippet(place.lt0)
+////                        .position(LatLng(vs.py, vs.px))
+//
+//                )
+//
+//            }
+//        }
+
+
+//
+//        localizacaoVeiculos = { pos ->
+//
+//            pos.l.forEach { place ->
+//
+//                val latLng = place.vs
+//                latLng.forEach { vs ->
+//
+//                    val marker = googleMap.addMarker(
+//                        MarkerOptions()
+//                            .title(place.c)
+//                            .snippet(place.lt0)
+//                            .position(LatLng(vs.py, vs.px))
+//
+//                            )
+//
+//                }
+//            }
+//
+//        }
     }
 }
