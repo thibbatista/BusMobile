@@ -17,13 +17,19 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.thiagosantos.gmaps.adapter.MarkerInfoAdapter
 import com.thiagosantos.gmaps.helper.BitmapHelper
 import com.thiagosantos.gmaps.model.L
+import com.thiagosantos.gmaps.model.Parada
 import com.thiagosantos.gmaps.services.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity() : AppCompatActivity() {
 
+
+    private lateinit var mMap: GoogleMap
+
     private val places = MutableLiveData<List<L>>()
+
+    private val paradas = MutableLiveData<List<Parada>>()
 
     private var localizacaoVeiculos: ((Posicao) -> Unit)? = null
 
@@ -48,22 +54,51 @@ class MainActivity() : AppCompatActivity() {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
-            addMarkers(googleMap)
+            addMarkersParadas(googleMap)
 
             googleMap.setOnMapLoadedCallback {
                 val bounds = LatLngBounds.builder()
+                bounds.include(LatLng(-23.516592, -46.698575))
+                googleMap.moveCamera(
+                       CameraUpdateFactory.newLatLngBounds(
+                            bounds.build(),
+                         100
+                       )
+                   )
 
-                places.observe(this){ place ->
-                    place.forEach { l ->
-                        l.vs.forEach{ vs->
-                            bounds.include(LatLng(vs.py, vs.px))
-                        }
 
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(),100))
-                    }
-                }
+                // chamadas call back de todas as paradas
+//
+//                paradas.observe(this) { parada ->
+//                    parada.forEach { p ->
+//                        bounds.include(LatLng(p.latitude, p.longitude))
+//                    }
+//                    googleMap.moveCamera(
+//                        CameraUpdateFactory.newLatLngBounds(
+//                            bounds.build(),
+//                            100
+//                        )
+//                    )
+//
+//                }
 
-            }
+//call back para camera maps , de todas as posiçoes dos veiculos
+//                places.observe(this) { place ->
+//                    place.forEach { l ->
+//                        l.vs.forEach { vs ->
+//                            bounds.include(LatLng(vs.py, vs.px))
+//                        }
+//
+//                        googleMap.moveCamera(
+//                            CameraUpdateFactory.newLatLngBounds(
+//                                bounds.build(),
+//                                100
+//                            )
+//                        )
+//                    }
+//                }
+
+           }
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -71,9 +106,19 @@ class MainActivity() : AppCompatActivity() {
 
         }
 
-        getPosition()
+        getParadas()
+
+        //testar ver se pega o scopo dos marcadores
+         mapFragment.getMapAsync{
+            it.setOnInfoWindowClickListener {
+                it.tag
+                Log.d(TAG, "headers-debug: ${it.tag}")
+            }
+        }
+
 
     }
+
 
 
     private suspend fun authKeyApi() {
@@ -91,7 +136,7 @@ class MainActivity() : AppCompatActivity() {
         }
     }
 
-
+    //pega todas as posições dos onibus
     private fun getPosition() {
         lifecycleScope.launch {
             val response = ApiService.getPosicoes()
@@ -108,7 +153,25 @@ class MainActivity() : AppCompatActivity() {
             }
         }
 
+    }
 
+    //pega todas as paradas
+    private fun getParadas() {
+
+        lifecycleScope.launch {
+            val response = ApiService.getParadas("0")
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    paradas.postValue(body)
+
+                    Log.d(ContentValues.TAG, "onCreate-> Teste saída: $body")
+
+                }
+
+            }
+        }
     }
 
     private fun mapFragment(context: Context) {
@@ -140,6 +203,7 @@ class MainActivity() : AppCompatActivity() {
         }
     }
 
+    // adiciona marcadores para todas as posicoes
     private fun addMarkers(googleMap: GoogleMap) {
 
         places.observe(this) { place ->
@@ -162,42 +226,29 @@ class MainActivity() : AppCompatActivity() {
             }
         }
 
-//        places.forEach { place ->
-//
-//            val latLng = place.vs
-//            latLng.forEach { vs ->
-//
-////                val marker = googleMap.addMarker(
-////                    MarkerOptions()
-////                        .title(place.c)
-////                        .snippet(place.lt0)
-////                        .position(LatLng(vs.py, vs.px))
-//
-//                )
-//
-//            }
-//        }
-
-
-//
-//        localizacaoVeiculos = { pos ->
-//
-//            pos.l.forEach { place ->
-//
-//                val latLng = place.vs
-//                latLng.forEach { vs ->
-//
-//                    val marker = googleMap.addMarker(
-//                        MarkerOptions()
-//                            .title(place.c)
-//                            .snippet(place.lt0)
-//                            .position(LatLng(vs.py, vs.px))
-//
-//                            )
-//
-//                }
-//            }
-//
-//        }
     }
+
+    // adciona marcadores para todas as paradas
+    private fun addMarkersParadas(googleMap: GoogleMap) {
+
+        paradas.observe(this) { parada ->
+            parada.forEach { p ->
+
+                val marker = googleMap.addMarker(
+                    MarkerOptions()
+                        .title(p.nome)
+                        .snippet(p.enderecoParada)
+                        .position(LatLng(p.latitude, p.longitude))
+                        .icon(
+                            BitmapHelper.vectorToBitmap(
+                                this,
+                                R.drawable.ic_baseline_directions_bus_24,
+                                ContextCompat.getColor(this, R.color.teal_200)
+                            )
+                        )
+                )
+            }
+        }
+    }
+
 }

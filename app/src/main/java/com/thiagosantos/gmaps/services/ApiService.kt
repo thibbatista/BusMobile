@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.thiagosantos.gmaps.Posicao
+import com.thiagosantos.gmaps.model.Parada
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -56,10 +57,10 @@ class ApiService() {
         suspend fun getPosicoes(): Response<Posicao> {
             return olhoVivoServices.getPosicoes(certificacao)
         }
-//
-//        suspend fun getParadas(nomeRua: String): Response<List<Parada>> {
-//            return olhoVivoServices.getParada(certificacao, nomeRua)
-//        }
+
+        suspend fun getParadas(nomeRua: String): Response<List<Parada>> {
+            return olhoVivoServices.getParada(certificacao, nomeRua)
+        }
 //
 //        suspend fun getPrevisao(id: Int): Response<PrevisaoChegada> {
 //            return olhoVivoServices.getPrevisao(certificacao, id)
