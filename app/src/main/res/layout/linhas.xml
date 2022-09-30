@@ -3,16 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp">
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="24dp">
 
 
     <ImageView
+
         android:id="@+id/icon_bus"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@drawable/ic_baseline_directions_bus_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/purple_700" />
 
     <ImageView
         android:id="@+id/icon_chair"
