@@ -25,11 +25,14 @@ class ListLinhasAdapter(
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
         val veiculos =  linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos
+        val horarioPrevisto = linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos[0].horarioPrevisto
 
         holder.codigoLinha.text = linhasParadas.parada.relacaoLinhas[position].codigoLinha.toString()
         holder.letreiro.text =  linhasParadas.parada.relacaoLinhas[position].destino
-        holder.previsao.text = linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos[0].horarioPrevisto
-        holder.tempo.text = holder.currentDateAndTime
+        holder.previsao.text = horarioPrevisto
+        holder.tempo.text = getDuracao(holder.currentDateAndTime, horarioPrevisto).toString() + " min"
+
+
 
         if (veiculos.isNotEmpty() && veiculos.size >= 2){
             holder.prox1.text = veiculos[1].horarioPrevisto
@@ -51,59 +54,56 @@ class ListLinhasAdapter(
         return linhasParadas.parada.relacaoLinhas.size
     }
 }
+//
+//fun difference(hour1: String, hour2: String) {
+//    val simpleDateFormat = SimpleDateFormat("HH:mm")
+//    val time = simpleDateFormat.format(Date())
+//
+//    val start = SimpleDateFormat("HH:mm").parse(hour1)
+//    val stop = SimpleDateFormat("HH:mm").parse(hour2)
+//
+//
+//
+//
+//    val time1: LocalTime = LocalTime.of(start.time.hours, start.time.minutes.toInt())
+//    val time2: LocalTime = LocalTime.of(21, 22)
+//
+//
+//    // Calculating the difference in Hours
+//    val hours: Long = ChronoUnit.HOURS.between(time1, time2)
+//
+//    // Calculating the difference in Minutes
+//    val minutes: Long = ChronoUnit.MINUTES.between(time1, time2) % 60
+//
+//
+//    // Printing the difference
+//    println(
+//        "Difference is " + hours + " hours " + minutes
+//                + " minutes " + " seconds."
+//    )
+//}
+
+
+// subtracao de horas
+
+fun getDuracao(hour1: String, hour2: String): Long {
+
+
+    val format = SimpleDateFormat("HH:mm")
+    val time1 = format.parse(hour1).time
+    val time2 = format.parse(hour2).time
+
+    val duracao = time2 - time1
+
+    Log.d("TIMEEEEEE----->>>>", "Resultado da subtracao de horas da funcao getDuracao--------->>>: ${duracao/60000}")
+
+    return duracao / 60000
+
+}
 
 
 
 class MainViewHolder(binding: LinhasBinding) : RecyclerView.ViewHolder(binding.root) {
-//    @SerializedName("hr")
-//    val hora: String,
-//    @SerializedName("p")
-//    val parada: P
-//    )
-//
-//    data class P(
-//        @SerializedName("cp")
-//        val codigoParada: Int,
-//        @SerializedName("l")
-//        val relacaoLinhas: List<L>,
-//        @SerializedName("np")
-//        val nomeParada: String,
-//        @SerializedName("px")
-//        val longitudeParada: Double,
-//        @SerializedName("py")
-//        val latitudeParada: Double
-//    )
-//
-//    data class L(
-//        @SerializedName("c")
-//        val letreiro: String,
-//        @SerializedName("cl")
-//        val codigoLinha: Int,
-//        @SerializedName("lt0")
-//        val destino: String,
-//        @SerializedName("lt1")
-//        val origem: String,
-//        @SerializedName("qv")
-//        val quantidadeVeiculos: Int,
-//        @SerializedName("sl")
-//        val sentido: Int,
-//        @SerializedName("vs")
-//        val relacaoVeiculos: List<com.thiagosantos.gmaps.model.V>
-//    )
-//
-//    data class V(
-//        @SerializedName("a")
-//        val acessivelDeficiente: Boolean,
-//        @SerializedName("p")
-//        val prefixoVeiculo: String,
-//        @SerializedName("px")
-//        val longitudeVeiculo: Double,
-//        @SerializedName("py")
-//        val latitudeVeiculo: Double,
-//        @SerializedName("t")
-//        val horarioPrevisto: String,
-//        @SerializedName("ta")
-//        val horarioCaptura: String
 
     val codigoLinha = binding.tvNumberLine
     val letreiro = binding.destiny
