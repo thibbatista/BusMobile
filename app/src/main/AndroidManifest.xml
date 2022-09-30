@@ -3,8 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.thiagosantos.gmaps">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -15,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gmaps"
         tools:targetApi="31">
+        <activity
+            android:name=".ListLinhasAcitvity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -27,11 +28,12 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${GOOGLE_MAPS_API_KEY}"/>
+            android:value="${GOOGLE_MAPS_API_KEY}" />
         <meta-data
             android:name="OLHO_API_KEY"
             android:value="${OLHO_VIVO_API_KEY}" />
-
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

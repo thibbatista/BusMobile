@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.thiagosantos.gmaps.Posicao
+import com.thiagosantos.gmaps.model.LinhasParadas
 import com.thiagosantos.gmaps.model.Parada
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -60,6 +61,10 @@ class ApiService() {
 
         suspend fun getParadas(nomeRua: String): Response<List<Parada>> {
             return olhoVivoServices.getParada(certificacao, nomeRua)
+        }
+
+        suspend fun getLinhas(id: Int): Response<LinhasParadas> {
+            return olhoVivoServices.getLinhas(certificacao, id)
         }
 //
 //        suspend fun getPrevisao(id: Int): Response<PrevisaoChegada> {

@@ -1,6 +1,7 @@
 package com.thiagosantos.gmaps.services
 
 import com.thiagosantos.gmaps.Posicao
+import com.thiagosantos.gmaps.model.LinhasParadas
 import com.thiagosantos.gmaps.model.Parada
 import retrofit2.Response
 import retrofit2.http.GET
@@ -20,6 +21,12 @@ interface OlhoVivoAPI {
         @Header("Cookie") credencial: String,
         @Query("termosBusca") nomeRua: String
     ): Response<List<Parada>>
+
+    @GET("Previsao/Parada")
+    suspend fun getLinhas(
+        @Header("Cookie") credencial: String,
+        @Query("codigoParada") id: Int
+    ): Response<LinhasParadas>
 
 //    @GET("Previsao/Parada")
 //    suspend fun getPrevisao(@Header("Cookie") certificacao: String, @Query("codigoParada") id: Int): Response<PrevisaoChegada>

@@ -5,9 +5,13 @@
       <map>
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.218" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_directions_bus_24.xml" value="0.218" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_wheelchair_pickup_24.xml" value="0.215" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_launcher_background.xml" value="0.218" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_list_linhas.xml" value="0.16" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_main.xml" value="0.2056159420289855" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/custon_marker_info.xml" value="0.2056159420289855" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/linha.xml" value="0.24895833333333334" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/linhas.xml" value="0.25" />
       </map>
     </option>
   </component>

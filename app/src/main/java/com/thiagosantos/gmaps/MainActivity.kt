@@ -2,6 +2,7 @@ package com.thiagosantos.gmaps
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -17,13 +18,14 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.thiagosantos.gmaps.adapter.MarkerInfoAdapter
 import com.thiagosantos.gmaps.helper.BitmapHelper
 import com.thiagosantos.gmaps.model.L
+import com.thiagosantos.gmaps.model.LinhasParadas
 import com.thiagosantos.gmaps.model.Parada
 import com.thiagosantos.gmaps.services.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.Serializable
 
 class MainActivity() : AppCompatActivity() {
-
 
     private lateinit var mMap: GoogleMap
 
@@ -31,19 +33,11 @@ class MainActivity() : AppCompatActivity() {
 
     private val paradas = MutableLiveData<List<Parada>>()
 
+    //private val linhas = MutableLiveData<List<LinhasParadas>>()
+
     private var localizacaoVeiculos: ((Posicao) -> Unit)? = null
 
     private val TAG = "DEBUG"
-
-    override fun onStart() {
-        super.onStart()
-
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,71 +48,51 @@ class MainActivity() : AppCompatActivity() {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
+
+            googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
             addMarkersParadas(googleMap)
+
+
 
             googleMap.setOnMapLoadedCallback {
                 val bounds = LatLngBounds.builder()
                 bounds.include(LatLng(-23.516592, -46.698575))
                 googleMap.moveCamera(
-                       CameraUpdateFactory.newLatLngBounds(
-                            bounds.build(),
-                         100
-                       )
-                   )
-
-
-                // chamadas call back de todas as paradas
-//
-//                paradas.observe(this) { parada ->
-//                    parada.forEach { p ->
-//                        bounds.include(LatLng(p.latitude, p.longitude))
-//                    }
-//                    googleMap.moveCamera(
-//                        CameraUpdateFactory.newLatLngBounds(
-//                            bounds.build(),
-//                            100
-//                        )
-//                    )
-//
-//                }
-
-//call back para camera maps , de todas as posiçoes dos veiculos
-//                places.observe(this) { place ->
-//                    place.forEach { l ->
-//                        l.vs.forEach { vs ->
-//                            bounds.include(LatLng(vs.py, vs.px))
-//                        }
-//
-//                        googleMap.moveCamera(
-//                            CameraUpdateFactory.newLatLngBounds(
-//                                bounds.build(),
-//                                100
-//                            )
-//                        )
-//                    }
-//                }
-
-           }
+                    CameraUpdateFactory.newLatLngBounds(
+                        bounds.build(),
+                        100
+                    )
+                )
+            }
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
             authKeyApi()
+            getParadas()
+
 
         }
 
-        getParadas()
+//        lifecycleScope.launch{
+//            getParadas()
+//
+//        }
+
+        //getParadas()
+
+
 
         //testar ver se pega o scopo dos marcadores
-         mapFragment.getMapAsync{
-            it.setOnInfoWindowClickListener {
-                it.tag
-                Log.d(TAG, "headers-debug: ${it.tag}")
+        mapFragment.getMapAsync {
+            it.setOnInfoWindowClickListener { marker ->
+                Log.d(TAG, "Marker id------------>>>>>>: ${marker.title}")
+                marker.title?.let { title -> iniciaListLinhasActivity(title.toInt()) }
+
+
             }
         }
 
-
     }
-
 
 
     private suspend fun authKeyApi() {
@@ -137,23 +111,23 @@ class MainActivity() : AppCompatActivity() {
     }
 
     //pega todas as posições dos onibus
-    private fun getPosition() {
-        lifecycleScope.launch {
-            val response = ApiService.getPosicoes()
-
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) {
-                    places.postValue(body.l)
-
-                    Log.d(ContentValues.TAG, "onCreate-> Teste saída: $body.l")
-
-                }
-
-            }
-        }
-
-    }
+//    private fun getPosition() {
+//        lifecycleScope.launch {
+//            val response = ApiService.getPosicoes()
+//
+//            if (response.isSuccessful) {
+//                val body = response.body()
+//                if (body != null) {
+//                    places.postValue(body.l)
+//
+//                    Log.d(ContentValues.TAG, "onCreate-> Teste saída: $body.l")
+//
+//                }
+//
+//            }
+//        }
+//
+//    }
 
     //pega todas as paradas
     private fun getParadas() {
@@ -174,69 +148,99 @@ class MainActivity() : AppCompatActivity() {
         }
     }
 
-    private fun mapFragment(context: Context) {
 
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map_fragment) as SupportMapFragment
-        mapFragment.getMapAsync { googleMap ->
-            addMarkers(googleMap)
-            googleMap.setInfoWindowAdapter(MarkerInfoAdapter(context))
+    //pega todas as linhas de uma parada, com previsao de chegada
+    private fun getLinhas(id: String) {
 
-            googleMap.setOnMapLoadedCallback {
-                val bounds = LatLngBounds.builder()
-                localizacaoVeiculos = { pos ->
-                    pos.l.forEach { posL ->
-                        val vs = posL.vs
-                        vs.forEach { posLvs ->
-                            bounds.include(LatLng(posLvs.py, posLvs.px))
-                        }
-                    }
+        lifecycleScope.launch {
+            val codigo = id.toInt()
+            val response = ApiService.getLinhas(codigo)
 
-                    googleMap.moveCamera(
-                        CameraUpdateFactory.newLatLngBounds(
-                            bounds.build(),
-                            100
-                        )
-                    )
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null) {
+                    places.postValue(body.parada.relacaoLinhas)
+
+                    Log.d(ContentValues.TAG, "Lista de Linhas por Parada-> Teste saída: ${body}")
+
                 }
             }
+
         }
     }
 
+//    private fun mapFragment(context: Context) {
+//
+//        val mapFragment = supportFragmentManager
+//            .findFragmentById(R.id.map_fragment) as SupportMapFragment
+//        mapFragment.getMapAsync { googleMap ->
+//            addMarkers(googleMap)
+//            googleMap.setInfoWindowAdapter(MarkerInfoAdapter(context))
+//
+//            googleMap.setOnMapLoadedCallback {
+//                val bounds = LatLngBounds.builder()
+//                localizacaoVeiculos = { pos ->
+//                    pos.l.forEach { posL ->
+//                        val vs = posL.vs
+//                        vs.forEach { posLvs ->
+//                            bounds.include(LatLng(posLvs.py, posLvs.px))
+//                        }
+//                    }
+//
+//                    googleMap.moveCamera(
+//                        CameraUpdateFactory.newLatLngBounds(
+//                            bounds.build(),
+//                            100
+//                        )
+//                    )
+//                }
+//            }
+//        }
+//    }
+
     // adiciona marcadores para todas as posicoes
-    private fun addMarkers(googleMap: GoogleMap) {
+//    private fun addMarkers(googleMap: GoogleMap) {
+//
+//        places.observe(this) { place ->
+//            place.forEach { l ->
+//                l.vs.forEach { vs ->
+//                    val marker = googleMap.addMarker(
+//                        MarkerOptions()
+//                            .title(vs.origem)
+//                            .snippet(vs.destino)
+//                            .position(LatLng(vs.py, vs.px))
+//                            .icon(
+//                                BitmapHelper.vectorToBitmap(
+//                                    this,
+//                                    R.drawable.ic_baseline_directions_bus_24,
+//                                    ContextCompat.getColor(this, R.color.teal_200)
+//                                )
+//                            )
+//                    )
+//                }
+//            }
+//        }
+//
+//    }
 
-        places.observe(this) { place ->
-            place.forEach { l ->
-                l.vs.forEach { vs ->
-                    val marker = googleMap.addMarker(
-                        MarkerOptions()
-                            .title(vs.origem)
-                            .snippet(vs.destino)
-                            .position(LatLng(vs.py, vs.px))
-                            .icon(
-                                BitmapHelper.vectorToBitmap(
-                                    this,
-                                    R.drawable.ic_baseline_directions_bus_24,
-                                    ContextCompat.getColor(this, R.color.teal_200)
-                                )
-                            )
-                    )
-                }
-            }
-        }
 
+    // intent
+
+    private fun iniciaListLinhasActivity(parada: Int) {
+        val intent = Intent(this, ListLinhasAcitvity::class.java)
+        intent.putExtra("parada", parada)
+        startActivity(intent)
     }
 
     // adciona marcadores para todas as paradas
     private fun addMarkersParadas(googleMap: GoogleMap) {
-
+        mMap = googleMap
         paradas.observe(this) { parada ->
             parada.forEach { p ->
 
-                val marker = googleMap.addMarker(
+                val marker = mMap.addMarker(
                     MarkerOptions()
-                        .title(p.nome)
+                        .title(p.id.toString())
                         .snippet(p.enderecoParada)
                         .position(LatLng(p.latitude, p.longitude))
                         .icon(
@@ -247,8 +251,11 @@ class MainActivity() : AppCompatActivity() {
                             )
                         )
                 )
+                if (marker != null) {
+                    marker.tag = p
+                }
             }
         }
-    }
 
+    }
 }
