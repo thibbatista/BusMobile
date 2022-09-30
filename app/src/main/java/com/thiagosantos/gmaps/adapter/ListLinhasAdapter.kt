@@ -33,6 +33,13 @@ class ListLinhasAdapter(
         holder.tempo.text = getDuracao(holder.currentDateAndTime, horarioPrevisto).toString() + " min"
 
 
+        if (veiculos[0].acessivelDeficiente){
+            return
+        }else{
+            holder.iconeDeficiente.setImageResource(0)
+        }
+
+
 
         if (veiculos.isNotEmpty() && veiculos.size >= 2){
             holder.prox1.text = veiculos[1].horarioPrevisto
@@ -47,6 +54,11 @@ class ListLinhasAdapter(
         }else {
             holder.prox2.text = null
         }
+
+        // fun deficiente
+
+
+
 
     }
 
@@ -83,6 +95,9 @@ class ListLinhasAdapter(
 //    )
 //}
 
+//  fun show ou hide icone deficiente
+
+
 
 // subtracao de horas
 
@@ -111,8 +126,9 @@ class MainViewHolder(binding: LinhasBinding) : RecyclerView.ViewHolder(binding.r
     val prox2 = binding.tvHour2
     val previsao = binding.tvTimeHour
     val tempo = binding.tvTime
-    val deficiente = false
+    val iconeDeficiente = binding.iconChair
     val time = SimpleDateFormat("HH:mm")
     val currentDateAndTime = time.format(Date())
+
 
 }
