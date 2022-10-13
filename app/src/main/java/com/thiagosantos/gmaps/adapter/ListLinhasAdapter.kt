@@ -4,17 +4,24 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.thiagosantos.gmaps.databinding.LinhasBinding
+import com.thiagosantos.gmaps.helper.LinhasHelper
 import com.thiagosantos.gmaps.model.LinhasParadas
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ListLinhasAdapter(
     private val context: Context,
-    private val linhasParadas: LinhasParadas
+    private val linhasParadas: LinhasParadas,
+
+    var onItemClick : ((LinhasHelper) -> Unit)? = null
+
 ) : RecyclerView.Adapter<MainViewHolder>() {
 
+    private lateinit var linhasHelper: LinhasHelper
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -24,6 +31,35 @@ class ListLinhasAdapter(
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
+        holder.itemView.setOnClickListener {
+            Log.d("TESTE DE CLICK", "TESTE CLICK RECYCLER VIEW")
+
+
+            linhasHelper = LinhasHelper(linhasParadas.parada.relacaoLinhas[position].letreiro,
+                linhasParadas.parada.relacaoLinhas[position].codigoLinha,
+                linhasParadas.parada.relacaoLinhas[position].destino,
+                linhasParadas.parada.relacaoLinhas[position].origem,
+                linhasParadas.parada.relacaoLinhas[position].sentido
+
+
+            )
+
+            onItemClick?.invoke(linhasHelper)
+
+        //linhasHelper.codigoLinha = linhasParadas.parada.relacaoLinhas[position].codigoLinha
+//        linhasHelper.destino = linhasParadas.parada.relacaoLinhas[position].destino
+//        linhasHelper.origem = linhasParadas.parada.relacaoLinhas[position].origem
+//        linhasHelper.sentido = linhasParadas.parada.relacaoLinhas[position].sentido
+//        linhasHelper.letreiro = linhasParadas.parada.relacaoLinhas[position].letreiro
+
+
+        }
+//        linhasHelper.codigoLinha = linhasParadas.parada.relacaoLinhas[position].codigoLinha
+//        linhasHelper.destino = linhasParadas.parada.relacaoLinhas[position].destino
+//        linhasHelper.origem = linhasParadas.parada.relacaoLinhas[position].origem
+//        linhasHelper.sentido = linhasParadas.parada.relacaoLinhas[position].sentido
+//        linhasHelper.letreiro = linhasParadas.parada.relacaoLinhas[position].letreiro
+
         val veiculos =  linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos
         val horarioPrevisto = linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos[0].horarioPrevisto
 
@@ -31,14 +67,6 @@ class ListLinhasAdapter(
         holder.letreiro.text =  linhasParadas.parada.relacaoLinhas[position].destino
         holder.previsao.text = horarioPrevisto
         holder.tempo.text = getDuracao(holder.currentDateAndTime, horarioPrevisto).toString() + " min"
-
-
-        if (veiculos[0].acessivelDeficiente){
-            return
-        }else{
-            holder.iconeDeficiente.setImageResource(0)
-        }
-
 
 
         if (veiculos.isNotEmpty() && veiculos.size >= 2){
@@ -55,54 +83,16 @@ class ListLinhasAdapter(
             holder.prox2.text = null
         }
 
-        // fun deficiente
-
-
-
-
     }
 
     override fun getItemCount(): Int {
         return linhasParadas.parada.relacaoLinhas.size
     }
 }
-//
-//fun difference(hour1: String, hour2: String) {
-//    val simpleDateFormat = SimpleDateFormat("HH:mm")
-//    val time = simpleDateFormat.format(Date())
-//
-//    val start = SimpleDateFormat("HH:mm").parse(hour1)
-//    val stop = SimpleDateFormat("HH:mm").parse(hour2)
-//
-//
-//
-//
-//    val time1: LocalTime = LocalTime.of(start.time.hours, start.time.minutes.toInt())
-//    val time2: LocalTime = LocalTime.of(21, 22)
-//
-//
-//    // Calculating the difference in Hours
-//    val hours: Long = ChronoUnit.HOURS.between(time1, time2)
-//
-//    // Calculating the difference in Minutes
-//    val minutes: Long = ChronoUnit.MINUTES.between(time1, time2) % 60
-//
-//
-//    // Printing the difference
-//    println(
-//        "Difference is " + hours + " hours " + minutes
-//                + " minutes " + " seconds."
-//    )
-//}
-
-//  fun show ou hide icone deficiente
-
-
 
 // subtracao de horas
 
 fun getDuracao(hour1: String, hour2: String): Long {
-
 
     val format = SimpleDateFormat("HH:mm")
     val time1 = format.parse(hour1).time
@@ -117,7 +107,6 @@ fun getDuracao(hour1: String, hour2: String): Long {
 }
 
 
-
 class MainViewHolder(binding: LinhasBinding) : RecyclerView.ViewHolder(binding.root) {
 
     val codigoLinha = binding.tvNumberLine
@@ -129,6 +118,5 @@ class MainViewHolder(binding: LinhasBinding) : RecyclerView.ViewHolder(binding.r
     val iconeDeficiente = binding.iconChair
     val time = SimpleDateFormat("HH:mm")
     val currentDateAndTime = time.format(Date())
-
 
 }

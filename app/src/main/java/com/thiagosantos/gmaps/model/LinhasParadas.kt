@@ -1,6 +1,8 @@
 package com.thiagosantos.gmaps.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+
 
 data class LinhasParadas(
     @SerializedName("hr")
@@ -21,6 +23,7 @@ data class P(
     @SerializedName("py")
     val latitudeParada: Double
 )
+
 
 data class L(
     @SerializedName("c")

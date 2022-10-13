@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class ApiService() {
+class ApiService()  {
 
     companion object {
 
@@ -63,7 +63,7 @@ class ApiService() {
             return olhoVivoServices.getParada(certificacao, nomeRua)
         }
 
-        suspend fun getLinhas(id: Int): Response<LinhasParadas> {
+        suspend fun getLinhas(id: Int): Response<LinhasParadas>  {
             return olhoVivoServices.getLinhas(certificacao, id)
         }
 //

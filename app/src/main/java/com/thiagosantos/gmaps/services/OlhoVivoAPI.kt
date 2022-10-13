@@ -1,5 +1,6 @@
 package com.thiagosantos.gmaps.services
 
+import android.os.Parcelable
 import com.thiagosantos.gmaps.Posicao
 import com.thiagosantos.gmaps.model.LinhasParadas
 import com.thiagosantos.gmaps.model.Parada
@@ -9,7 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.Query
 
 
-interface OlhoVivoAPI {
+interface OlhoVivoAPI  {
 //    @GET("Linha/Buscar")
 //    suspend fun getLinha(@Header("Cookie") credencial: String, @Query("termosBusca") codLinha: String): List<Linha>?
 
@@ -23,7 +24,7 @@ interface OlhoVivoAPI {
     ): Response<List<Parada>>
 
     @GET("Previsao/Parada")
-    suspend fun getLinhas(
+    suspend fun getLinhas (
         @Header("Cookie") credencial: String,
         @Query("codigoParada") id: Int
     ): Response<LinhasParadas>
