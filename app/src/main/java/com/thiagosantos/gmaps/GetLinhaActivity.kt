@@ -17,5 +17,9 @@ class GetLinhaActivity : AppCompatActivity() {
 
         Log.d("imprimi objeto","Imprimi objeto LinhasHelper preenchido ---------------->>>>>${linha}")
     }
-
+    
 }
+
+// TODO:  passar parada e linha, usar  /Previsao?codigoParada={codigoParada}&codigoLinha={codigoLinha}
+// TODO:  usar motion layout, usar  nesta activity usar dois xml, um da dascrições da linha e outro com o mapa mostrando as posicões
+// TODO: quando o usuario clicar no marker, exibir o horario previsto para a parada selecionada 

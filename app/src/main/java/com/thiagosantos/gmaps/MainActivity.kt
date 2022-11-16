@@ -3,8 +3,12 @@ package com.thiagosantos.gmaps
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
@@ -45,6 +49,30 @@ class MainActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         ApiService.instancia(applicationContext)
 
+
+
+
+        if (checkForInternet(this)) {
+            Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                authKeyApi()
+                getParadas()
+            }
+
+            loadMap()
+
+
+        } else {
+            Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+
+    fun loadMap(){
+
+
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
@@ -66,23 +94,6 @@ class MainActivity() : AppCompatActivity() {
             }
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            authKeyApi()
-            getParadas()
-
-
-        }
-
-//        lifecycleScope.launch{
-//            getParadas()
-//
-//        }
-
-        //getParadas()
-
-
-
-        //testar ver se pega o scopo dos marcadores
         mapFragment.getMapAsync {
             it.setOnInfoWindowClickListener { marker ->
                 Log.d(TAG, "Marker id------------>>>>>>: ${marker.title}")
@@ -106,28 +117,11 @@ class MainActivity() : AppCompatActivity() {
             Log.d(TAG, "headers-debug: $cookie")
             Log.d(TAG, "API autenticada")
         } catch (e: Exception) {
+            Toast.makeText(applicationContext, "Hummm!, você está sem sinal de Internet.", Toast.LENGTH_SHORT).show()
             Log.d(TAG, "API fora do ar: " + e.message)
         }
     }
 
-    //pega todas as posições dos onibus
-//    private fun getPosition() {
-//        lifecycleScope.launch {
-//            val response = ApiService.getPosicoes()
-//
-//            if (response.isSuccessful) {
-//                val body = response.body()
-//                if (body != null) {
-//                    places.postValue(body.l)
-//
-//                    Log.d(ContentValues.TAG, "onCreate-> Teste saída: $body.l")
-//
-//                }
-//
-//            }
-//        }
-//
-//    }
 
     //pega todas as paradas
     private fun getParadas() {
@@ -169,59 +163,6 @@ class MainActivity() : AppCompatActivity() {
         }
     }
 
-//    private fun mapFragment(context: Context) {
-//
-//        val mapFragment = supportFragmentManager
-//            .findFragmentById(R.id.map_fragment) as SupportMapFragment
-//        mapFragment.getMapAsync { googleMap ->
-//            addMarkers(googleMap)
-//            googleMap.setInfoWindowAdapter(MarkerInfoAdapter(context))
-//
-//            googleMap.setOnMapLoadedCallback {
-//                val bounds = LatLngBounds.builder()
-//                localizacaoVeiculos = { pos ->
-//                    pos.l.forEach { posL ->
-//                        val vs = posL.vs
-//                        vs.forEach { posLvs ->
-//                            bounds.include(LatLng(posLvs.py, posLvs.px))
-//                        }
-//                    }
-//
-//                    googleMap.moveCamera(
-//                        CameraUpdateFactory.newLatLngBounds(
-//                            bounds.build(),
-//                            100
-//                        )
-//                    )
-//                }
-//            }
-//        }
-//    }
-
-    // adiciona marcadores para todas as posicoes
-//    private fun addMarkers(googleMap: GoogleMap) {
-//
-//        places.observe(this) { place ->
-//            place.forEach { l ->
-//                l.vs.forEach { vs ->
-//                    val marker = googleMap.addMarker(
-//                        MarkerOptions()
-//                            .title(vs.origem)
-//                            .snippet(vs.destino)
-//                            .position(LatLng(vs.py, vs.px))
-//                            .icon(
-//                                BitmapHelper.vectorToBitmap(
-//                                    this,
-//                                    R.drawable.ic_baseline_directions_bus_24,
-//                                    ContextCompat.getColor(this, R.color.teal_200)
-//                                )
-//                            )
-//                    )
-//                }
-//            }
-//        }
-//
-//    }
 
 
     // intent
@@ -258,4 +199,48 @@ class MainActivity() : AppCompatActivity() {
         }
 
     }
+
+
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        // register activity with the connectivity manager service
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // if the android version is equal to M
+        // or greater we need to use the
+        // NetworkCapabilities to check what type of
+        // network has the internet connection
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // Returns a Network object corresponding to
+            // the currently active default data network.
+            val network = connectivityManager.activeNetwork ?: return false
+
+            // Representation of the capabilities of an active network.
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                // Indicates this network uses a Wi-Fi transport,
+                // or WiFi has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                // Indicates this network uses a Cellular transport. or
+                // Cellular has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                // else return false
+                else -> false
+            }
+        } else {
+            // if the android version is below M
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
 }
+
+
+
