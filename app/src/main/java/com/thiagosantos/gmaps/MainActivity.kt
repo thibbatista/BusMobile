@@ -8,6 +8,8 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -50,7 +52,11 @@ class MainActivity() : AppCompatActivity() {
         ApiService.instancia(applicationContext)
 
 
+        loadApis()
 
+    }
+
+    private fun loadApis(){
 
         if (checkForInternet(this)) {
             Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
@@ -66,11 +72,31 @@ class MainActivity() : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
         }
-
     }
 
+    // overrride menu toolbar
 
-    fun loadMap(){
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+        menuInflater.inflate(R.menu.main_menu, menu);
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.shareButton -> {
+
+                loadApis()
+
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun loadMap(){
 
 
         val mapFragment = supportFragmentManager

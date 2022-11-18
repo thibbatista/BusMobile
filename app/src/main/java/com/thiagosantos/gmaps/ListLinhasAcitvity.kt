@@ -4,6 +4,8 @@ import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -23,8 +25,6 @@ class ListLinhasAcitvity() : AppCompatActivity() {
 
     private lateinit var binding: ActivityListLinhasBinding
 
-    //private lateinit var linhasHelper: LinhasHelper
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +33,78 @@ class ListLinhasAcitvity() : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        getLinhasIntent()
+
+//
+//        val dados = intent.extras
+//        val codigoParada = dados?.getInt("parada")
+//
+//        Log.d("DEBUG", "Codigo da parada captura da acitivity Main: $codigoParada")
+//
+//        if (codigoParada != null) {
+//
+//            lifecycleScope.launch {
+//                getLinhas(codigoParada)
+//            }
+//        }
+
+        listLinhas.observe(this) { linhasParadas ->
+
+            listLinhasAdapter = ListLinhasAdapter(this, linhasParadas)
+            binding.rvPrevisao.layoutManager = LinearLayoutManager(this)
+            binding.rvPrevisao.adapter = listLinhasAdapter
+
+            listLinhasAdapter.onItemClick = { linhaHelper ->
+
+                iniciaListLinhasActivity(linhaHelper)
+            }
+        }
+    }
+
+    // overrride menu toolbar
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+
+        menuInflater.inflate(R.menu.main_menu, menu);
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.shareButton -> {
+
+                getLinhasIntent()
+
+
+               // Log.d("DEBUG", "Botao rfresh pressionado PAGINA LISTA ACTIVITY")
+
+                // para abrir tela de compartilhamento
+//                val sharingIntent = Intent(Intent.ACTION_SEND)
+//
+//                // type of the content to be shared
+//                sharingIntent.type = "text/plain"
+//
+//                // Body of the content
+//                val shareBody = "Your Body Here"
+//
+//                // subject of the content. you can share anything
+//                val shareSubject = "Your Subject Here"
+//
+//                // passing body of the content
+//                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+//
+//                // passing subject of the content
+//                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
+//                startActivity(Intent.createChooser(sharingIntent, "Share using"))
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun getLinhasIntent(){
         val dados = intent.extras
         val codigoParada = dados?.getInt("parada")
 
@@ -43,42 +115,11 @@ class ListLinhasAcitvity() : AppCompatActivity() {
             lifecycleScope.launch {
                 getLinhas(codigoParada)
             }
-
         }
+    }
 
-        listLinhas.observe(this) { linhasParadas ->
-
-
-            listLinhasAdapter = ListLinhasAdapter(this, linhasParadas)
-            binding.rvPrevisao.layoutManager = LinearLayoutManager(this)
-            binding.rvPrevisao.adapter = listLinhasAdapter
-
-
-            // click e pega position da view
-//
-//            var letreiro: String?,
-//            var codigoLinha: Int,
-//            var destino: String?,
-//            var origem: String?,
-//            var sentido: Int,
-
-            listLinhasAdapter.onItemClick = { linhaHelper ->
-//
-//                linhasHelper = LinhasHelper(linhasParadas.parada.relacaoLinhas[position].letreiro,)
-//                // preenche o objeto linhasHelper que irá ser passado para a activity GetLinhaActivity
-//                linhasHelper.codigoLinha = linhasParadas.parada.relacaoLinhas[position].codigoLinha
-//                linhasHelper.destino = linhasParadas.parada.relacaoLinhas[position].destino
-//                linhasHelper.origem = linhasParadas.parada.relacaoLinhas[position].origem
-//                linhasHelper.sentido = linhasParadas.parada.relacaoLinhas[position].sentido
-//                linhasHelper.letreiro = linhasParadas.parada.relacaoLinhas[position].letreiro
-
-
-                iniciaListLinhasActivity(linhaHelper)
-
-            }
-        }
-
-
+    private fun refreshButtonIsPressed(item: Boolean): Boolean{
+        return item
     }
 
 
@@ -96,10 +137,8 @@ class ListLinhasAcitvity() : AppCompatActivity() {
                     //places.postValue(body.p.l)
 
                     Log.d(ContentValues.TAG, "Lista de Linhas por Parada-> Teste saída: ${body}")
-
                 }
             }
-
         }
     }
 
@@ -111,5 +150,4 @@ class ListLinhasAcitvity() : AppCompatActivity() {
         intent.putExtra("linha", linhasHelper)
         startActivity(intent)
     }
-
 }
