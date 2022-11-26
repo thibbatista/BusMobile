@@ -8,6 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class LinhasHelper(
     var letreiro: String?,
     var codigoLinha: Int,
+    var codigoParada: Int,
     var destino: String?,
     var origem: String?,
     var sentido: Int

@@ -3,13 +3,14 @@ package com.thiagosantos.gmaps
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.location.Address
+import android.location.Geocoder
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -21,15 +22,15 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.thiagosantos.gmaps.adapter.MarkerInfoAdapter
 import com.thiagosantos.gmaps.helper.BitmapHelper
 import com.thiagosantos.gmaps.model.L
-import com.thiagosantos.gmaps.model.LinhasParadas
 import com.thiagosantos.gmaps.model.Parada
 import com.thiagosantos.gmaps.services.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.Serializable
+import java.util.*
 
 class MainActivity() : AppCompatActivity() {
 
@@ -54,9 +55,18 @@ class MainActivity() : AppCompatActivity() {
 
         loadApis()
 
+        val textview = findViewById<TextView>(R.id.marqueeText)
+        textview.text = getAddress(LatLng(-23.516592, -46.698575))
+        textview.isSelected = true;
+
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.setOnClickListener{
+            loadApis()
+        }
+
     }
 
-    private fun loadApis(){
+    private fun loadApis() {
 
         if (checkForInternet(this)) {
             Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
@@ -73,30 +83,30 @@ class MainActivity() : AppCompatActivity() {
             Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
         }
     }
+//
+//    // overrride menu toolbar
+//
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//
+//        menuInflater.inflate(R.menu.main_menu, menu);
+//
+//        return super.onCreateOptionsMenu(menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//
+//        when (item.itemId) {
+//            R.id.shareButton -> {
+//
+//                loadApis()
+//
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
+//    }
 
-    // overrride menu toolbar
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-
-        menuInflater.inflate(R.menu.main_menu, menu);
-
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.shareButton -> {
-
-                loadApis()
-
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
-    private fun loadMap(){
+    private fun loadMap() {
 
 
         val mapFragment = supportFragmentManager
@@ -107,6 +117,8 @@ class MainActivity() : AppCompatActivity() {
             addMarkersParadas(googleMap)
 
 
+            // getAddress(LatLng(-23.516592, -46.698575))
+
 
             googleMap.setOnMapLoadedCallback {
                 val bounds = LatLngBounds.builder()
@@ -115,6 +127,7 @@ class MainActivity() : AppCompatActivity() {
                     CameraUpdateFactory.newLatLngBounds(
                         bounds.build(),
                         100
+
                     )
                 )
             }
@@ -123,7 +136,25 @@ class MainActivity() : AppCompatActivity() {
         mapFragment.getMapAsync {
             it.setOnInfoWindowClickListener { marker ->
                 Log.d(TAG, "Marker id------------>>>>>>: ${marker.title}")
-                marker.title?.let { title -> iniciaListLinhasActivity(title.toInt()) }
+                Log.d(TAG, "Nome da Parada------------>>>>>>: ${marker.snippet}")
+                Log.d(
+                    TAG,
+                    "endereço da localizacao=========>>>>>> " + getAddress(
+                        LatLng(
+                            -23.516592,
+                            -46.698575
+                        )
+                    )
+                )
+
+                marker.title?.let { it1 ->
+                    marker.snippet?.let { it2 ->
+                        iniciaListLinhasActivity(
+                            it1.toInt(),
+                            it2
+                        )
+                    }
+                }
 
 
             }
@@ -143,7 +174,11 @@ class MainActivity() : AppCompatActivity() {
             Log.d(TAG, "headers-debug: $cookie")
             Log.d(TAG, "API autenticada")
         } catch (e: Exception) {
-            Toast.makeText(applicationContext, "Hummm!, você está sem sinal de Internet.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                applicationContext,
+                "Hummm!, você está sem sinal de Internet.",
+                Toast.LENGTH_SHORT
+            ).show()
             Log.d(TAG, "API fora do ar: " + e.message)
         }
     }
@@ -152,6 +187,7 @@ class MainActivity() : AppCompatActivity() {
     //pega todas as paradas
     private fun getParadas() {
 
+        //TODO Adicinar Exception para essa função, qd cai a internet e atualiza a pagina crash o app
         lifecycleScope.launch {
             val response = ApiService.getParadas("0")
 
@@ -166,6 +202,24 @@ class MainActivity() : AppCompatActivity() {
 
             }
         }
+    }
+
+    // pega endereço de uma localizacao
+    private fun getAddress(latLng: LatLng): String {
+        val geocoder = Geocoder(this, Locale.getDefault())
+        val addresses: List<Address>?
+        val address: Address?
+        var addressText = ""
+
+        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+
+        if (addresses.isNotEmpty()) {
+            address = addresses[0]
+            addressText = address.getAddressLine(0)
+        } else {
+            addressText = "its not appear"
+        }
+        return addressText
     }
 
 
@@ -190,12 +244,18 @@ class MainActivity() : AppCompatActivity() {
     }
 
 
-
     // intent
 
-    private fun iniciaListLinhasActivity(parada: Int) {
+    private fun iniciaListLinhasActivity(parada: Int, endereco: String) {
         val intent = Intent(this, ListLinhasAcitvity::class.java)
         intent.putExtra("parada", parada)
+        intent.putExtra("endereco", endereco)
+        startActivity(intent)
+    }
+
+    private fun iniciaListLinhasActivity2(endereco: String) {
+        val intent = Intent(this, ListLinhasAcitvity::class.java)
+        intent.putExtra("endereco", endereco)
         startActivity(intent)
     }
 
@@ -227,11 +287,11 @@ class MainActivity() : AppCompatActivity() {
     }
 
 
-
     private fun checkForInternet(context: Context): Boolean {
 
         // register activity with the connectivity manager service
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         // if the android version is equal to M
         // or greater we need to use the

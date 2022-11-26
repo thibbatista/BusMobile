@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.thiagosantos.gmaps.adapter.ListLinhasAdapter
 import com.thiagosantos.gmaps.databinding.ActivityListLinhasBinding
 import com.thiagosantos.gmaps.helper.LinhasHelper
@@ -34,6 +37,9 @@ class ListLinhasAcitvity() : AppCompatActivity() {
 
 
         getLinhasIntent()
+
+
+
 
 //
 //        val dados = intent.extras
@@ -60,60 +66,74 @@ class ListLinhasAcitvity() : AppCompatActivity() {
             }
         }
     }
-
-    // overrride menu toolbar
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-
-        menuInflater.inflate(R.menu.main_menu, menu);
-
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.shareButton -> {
-
-                getLinhasIntent()
-
-
-               // Log.d("DEBUG", "Botao rfresh pressionado PAGINA LISTA ACTIVITY")
-
-                // para abrir tela de compartilhamento
-//                val sharingIntent = Intent(Intent.ACTION_SEND)
 //
-//                // type of the content to be shared
-//                sharingIntent.type = "text/plain"
+//    // overrride menu toolbar
 //
-//                // Body of the content
-//                val shareBody = "Your Body Here"
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
 //
-//                // subject of the content. you can share anything
-//                val shareSubject = "Your Subject Here"
+//        menuInflater.inflate(R.menu.main_menu, menu);
 //
-//                // passing body of the content
-//                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+//        return super.onCreateOptionsMenu(menu)
+//    }
 //
-//                // passing subject of the content
-//                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
-//                startActivity(Intent.createChooser(sharingIntent, "Share using"))
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//
+//        when (item.itemId) {
+//            R.id.shareButton -> {
+//
+//                getLinhasIntent()
+//
+//
+//               // Log.d("DEBUG", "Botao rfresh pressionado PAGINA LISTA ACTIVITY")
+//
+//                // para abrir tela de compartilhamento
+////                val sharingIntent = Intent(Intent.ACTION_SEND)
+////
+////                // type of the content to be shared
+////                sharingIntent.type = "text/plain"
+////
+////                // Body of the content
+////                val shareBody = "Your Body Here"
+////
+////                // subject of the content. you can share anything
+////                val shareSubject = "Your Subject Here"
+////
+////                // passing body of the content
+////                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+////
+////                // passing subject of the content
+////                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
+////                startActivity(Intent.createChooser(sharingIntent, "Share using"))
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
+//    }
 
     private fun getLinhasIntent(){
         val dados = intent.extras
         val codigoParada = dados?.getInt("parada")
+        val enderecoParada = dados?.getString("endereco")
+
+        Log.d("DEBUG", "Endereço da Parada obtido da MAIN------===============>>>>>>>>>>>>>>####*******#**#*#*#*.>>>>>>>: $enderecoParada")
 
         Log.d("DEBUG", "Codigo da parada captura da acitivity Main: $codigoParada")
+
+        val letreiro = findViewById<TextView>(R.id.marqueeText)
+        letreiro.text = enderecoParada
+        letreiro.isSelected = true;
+
 
         if (codigoParada != null) {
 
             lifecycleScope.launch {
                 getLinhas(codigoParada)
+
+                //refresh button
+                val fab = findViewById<FloatingActionButton>(R.id.fab)
+                fab.setOnClickListener{
+                    getLinhas(codigoParada)
+                }
             }
         }
     }
@@ -146,7 +166,7 @@ class ListLinhasAcitvity() : AppCompatActivity() {
     //passa o objeto linhaHelper para activity GetLinhaActivity
 
     private fun iniciaListLinhasActivity(linhasHelper: LinhasHelper) {
-        val intent = Intent(this, GetLinhaActivity::class.java)
+        val intent = Intent(this, LinhaGps::class.java)
         intent.putExtra("linha", linhasHelper)
         startActivity(intent)
     }

@@ -1,9 +1,12 @@
 package com.thiagosantos.gmaps
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.thiagosantos.gmaps.helper.LinhasHelper
+
 
 class GetLinhaActivity : AppCompatActivity() {
 
@@ -16,6 +19,19 @@ class GetLinhaActivity : AppCompatActivity() {
         linha = intent.getParcelableExtra("linha")
 
         Log.d("imprimi objeto","Imprimi objeto LinhasHelper preenchido ---------------->>>>>${linha}")
+
+//        val textview = findViewById<TextView>(R.id.marqueeText)
+//        textview.isSelected = true;
+
+//
+//
+//        // initializing the TextView
+//       val textview = findViewById<TextView>(R.id.marqueeText)
+//        val text = "ola eu sou um texto scrolling , isso é um text"
+//
+//        textview.text = text
+//
+//        textview.movementMethod = ScrollingMovementMethod.getInstance()
     }
     
 }

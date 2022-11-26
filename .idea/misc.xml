@@ -4,19 +4,33 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.218" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/bus_blue.xml" value="0.188" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_arrow_forward_24.xml" value="0.2555" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_close_24.xml" value="0.2555" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_directions_bus_24.xml" value="0.218" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_directions_bus_filled_24.xml" value="0.188" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_grid_view_24.xml" value="0.2555" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_keyboard_arrow_up_24.xml" value="0.2555" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_refresh_24.xml" value="0.188" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_baseline_wheelchair_pickup_24.xml" value="0.215" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_bus_stop_icon.xml" value="0.188" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/drawable/ic_launcher_background.xml" value="0.218" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/action_bar.xml" value="0.24895833333333334" />
-        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_get_linha.xml" value="0.22282608695652173" />
-        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_list_linhas.xml" value="0.16" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_get_linha.xml" value="0.264" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_linha_gps.xml" value="0.264" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_list_linhas.xml" value="0.264" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_main.xml" value="0.2056159420289855" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card.xml" value="0.2359375" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card_details_line.xml" value="0.2359375" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card_line.xml" value="0.1" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card_linha.xml" value="0.16" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/custon_marker_info.xml" value="0.2056159420289855" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/info_linha.xml" value="0.24895833333333334" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/linha.xml" value="0.24895833333333334" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/linhas.xml" value="0.25" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/maps.xml" value="0.2359375" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/tollbar.xml" value="0.536" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/tool.xml" value="0.25" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/top_app_bar.xml" value="0.25" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/menu/main_menu.xml" value="0.24895833333333334" />
       </map>
@@ -27,5 +41,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1" />
+      </ProjectState>
+    </option>
   </component>
 </project>

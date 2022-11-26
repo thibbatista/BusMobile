@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/teal_700"
+    android:elevation="4dp"
+    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    android:id="@+id/toolbar">
+
+
+
+    <TextView
+        android:id="@+id/marqueeText"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:textStyle="bold"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="OLA, SOU UM teste  de letreiro legal né"
+        android:textColor="@color/white"
+        android:elevation="4dp"
+        android:textSize="16sp"
+        android:textAllCaps="true"
+        android:layout_gravity="center"/>
+
+
+
+
+
+
+
+
+</androidx.appcompat.widget.Toolbar>

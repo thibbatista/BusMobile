@@ -37,6 +37,7 @@ class ListLinhasAdapter(
 
             linhasHelper = LinhasHelper(linhasParadas.parada.relacaoLinhas[position].letreiro,
                 linhasParadas.parada.relacaoLinhas[position].codigoLinha,
+                linhasParadas.parada.codigoParada,
                 linhasParadas.parada.relacaoLinhas[position].destino,
                 linhasParadas.parada.relacaoLinhas[position].origem,
                 linhasParadas.parada.relacaoLinhas[position].sentido

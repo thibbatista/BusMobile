@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/teal_700"
+    android:id="@+id/cardTotal">
+
+    <include layout="@layout/tollbar"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardDetails"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="16:9"
+        android:backgroundTint="@color/teal_700"
+        app:cardElevation="4dp">
+
+        <ImageView
+            android:id="@+id/iconArrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_baseline_keyboard_arrow_up_24"
+            android:layout_gravity="bottom|center"
+            android:rotation="0"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardInterno"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="@color/purple_500"
+            android:layout_marginBottom="30dp"
+            android:elevation="8dp"
+            app:cardElevation="8dp">
+
+            <TextView
+                android:id="@+id/tv_codigoLinha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="788-98"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_origem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vila União"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:layout_gravity="left|center"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_destino"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="centro"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:layout_gravity="right|center"
+                android:layout_marginTop="8dp"
+                android:textStyle="bold"
+                android:layout_marginRight="8dp"/>
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_baseline_arrow_forward_24"
+                android:layout_gravity="center|center_horizontal"
+                android:layout_marginTop="8dp"/>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
