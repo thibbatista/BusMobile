@@ -1,12 +1,17 @@
 package com.thiagosantos.gmaps
 
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +33,8 @@ class ListLinhasAcitvity() : AppCompatActivity() {
 
     private lateinit var binding: ActivityListLinhasBinding
 
+    private val TAG = "DEBUG"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +43,21 @@ class ListLinhasAcitvity() : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        getLinhasIntent()
+
+
+
+        if (checkForInternet(this)) {
+            Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
+
+            getLinhasIntent()
+
+
+
+        } else {
+            Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
+        }
+
+
 
 
 
@@ -129,12 +150,30 @@ class ListLinhasAcitvity() : AppCompatActivity() {
             lifecycleScope.launch {
                 getLinhas(codigoParada)
 
-                //refresh button
-                val fab = findViewById<FloatingActionButton>(R.id.fab)
-                fab.setOnClickListener{
-                    getLinhas(codigoParada)
-                }
             }
+
+
+            //refresh button
+            val fab = findViewById<FloatingActionButton>(R.id.fab)
+            fab.setOnClickListener{
+
+
+
+                if (checkForInternet(this)) {
+                    Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
+
+                    getLinhas(codigoParada)
+
+
+
+                } else {
+                    Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
+                }
+
+
+
+            }
+
         }
     }
 
@@ -146,20 +185,31 @@ class ListLinhasAcitvity() : AppCompatActivity() {
     //pega todas as linhas de uma parada, com previsao de chegada
     private fun getLinhas(id: Int) {
 
-        lifecycleScope.launch {
-            //val codigo = id.toInt()
-            val response = ApiService.getLinhas(id)
+        try {
 
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) {
-                    listLinhas.postValue(body)
-                    //places.postValue(body.p.l)
+            lifecycleScope.launch {
+                //val codigo = id.toInt()
+                val response = ApiService.getLinhas(id)
 
-                    Log.d(ContentValues.TAG, "Lista de Linhas por Parada-> Teste saída: ${body}")
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        listLinhas.postValue(body)
+                        //places.postValue(body.p.l)
+
+                        Log.d(ContentValues.TAG, "Lista de Linhas por Parada-> Teste saída: ${body}")
+                    }
                 }
             }
+        }catch (e: Exception) {
+            Toast.makeText(
+                applicationContext,
+                "Hummm!, você está sem sinal de Internet.",
+                Toast.LENGTH_SHORT
+            ).show()
+            Log.d(TAG, "API fora do ar: " + e.message)
         }
+
     }
 
 
@@ -170,4 +220,47 @@ class ListLinhasAcitvity() : AppCompatActivity() {
         intent.putExtra("linha", linhasHelper)
         startActivity(intent)
     }
+
+
+
+    private fun checkForInternet(context: Context): Boolean {
+
+        // register activity with the connectivity manager service
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        // if the android version is equal to M
+        // or greater we need to use the
+        // NetworkCapabilities to check what type of
+        // network has the internet connection
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            // Returns a Network object corresponding to
+            // the currently active default data network.
+            val network = connectivityManager.activeNetwork ?: return false
+
+            // Representation of the capabilities of an active network.
+            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+            return when {
+                // Indicates this network uses a Wi-Fi transport,
+                // or WiFi has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+                // Indicates this network uses a Cellular transport. or
+                // Cellular has network connectivity
+                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+                // else return false
+                else -> false
+            }
+        } else {
+            // if the android version is below M
+            @Suppress("DEPRECATION") val networkInfo =
+                connectivityManager.activeNetworkInfo ?: return false
+            @Suppress("DEPRECATION")
+            return networkInfo.isConnected
+        }
+    }
+
 }

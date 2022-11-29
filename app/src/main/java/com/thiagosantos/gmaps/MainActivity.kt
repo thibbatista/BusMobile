@@ -60,7 +60,7 @@ class MainActivity() : AppCompatActivity() {
         textview.isSelected = true;
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener{
+        fab.setOnClickListener {
             loadApis()
         }
 
@@ -187,64 +187,58 @@ class MainActivity() : AppCompatActivity() {
     //pega todas as paradas
     private fun getParadas() {
 
-        //TODO Adicinar Exception para essa função, qd cai a internet e atualiza a pagina crash o app
-        lifecycleScope.launch {
-            val response = ApiService.getParadas("0")
+        try {
+            lifecycleScope.launch {
+                val response = ApiService.getParadas("0")
 
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) {
-                    paradas.postValue(body)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        paradas.postValue(body)
 
-                    Log.d(ContentValues.TAG, "onCreate-> Teste saída: $body")
+                        Log.d(ContentValues.TAG, "onCreate-> Teste saída: $body")
 
+                    }
                 }
-
             }
+
+        } catch (e: Exception) {
+            Toast.makeText(
+                applicationContext,
+                "Hummm!, você está sem sinal de Internet.",
+                Toast.LENGTH_SHORT
+            ).show()
+            Log.d(TAG, "API fora do ar: " + e.message)
         }
     }
 
+
     // pega endereço de uma localizacao
     private fun getAddress(latLng: LatLng): String {
+
+
         val geocoder = Geocoder(this, Locale.getDefault())
-        val addresses: List<Address>?
         val address: Address?
         var addressText = ""
 
-        addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+        val addresses: List<Address>? =
+            geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
 
-        if (addresses.isNotEmpty()) {
-            address = addresses[0]
-            addressText = address.getAddressLine(0)
-        } else {
-            addressText = "its not appear"
+        if (addresses != null) {
+            if (addresses.isNotEmpty()) {
+                address = addresses[0]
+                addressText = address.getAddressLine(0)
+            } else {
+                addressText = "its not appear"
+            }
         }
         return addressText
     }
 
 
-    //pega todas as linhas de uma parada, com previsao de chegada
-    private fun getLinhas(id: String) {
-
-        lifecycleScope.launch {
-            val codigo = id.toInt()
-            val response = ApiService.getLinhas(codigo)
-
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) {
-                    places.postValue(body.parada.relacaoLinhas)
-
-                    Log.d(ContentValues.TAG, "Lista de Linhas por Parada-> Teste saída: ${body}")
-
-                }
-            }
-
-        }
-    }
 
 
-    // intent
+// intent
 
     private fun iniciaListLinhasActivity(parada: Int, endereco: String) {
         val intent = Intent(this, ListLinhasAcitvity::class.java)
