@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    android:background="@color/white"
+    android:background="@color/primaryTextColor"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="R ARMINDA/ R BALTHAZAR DA VEIGA"
         android:textStyle="bold"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,6 +37,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Listar linhas"
+        android:padding="8dp"
+        android:background="@color/primaryLightColor"
         android:textAllCaps="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

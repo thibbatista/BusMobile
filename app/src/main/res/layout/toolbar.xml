@@ -2,9 +2,9 @@
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/teal_700"
     android:elevation="4dp"
-    android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+    android:theme="@style/Theme.Gmaps"
+    android:background="@color/primaryColor"
     android:id="@+id/toolbar">
 
 
@@ -19,10 +19,10 @@
         android:scrollHorizontally="true"
         android:singleLine="true"
         android:text="OLA, SOU UM teste  de letreiro legal né"
-        android:textColor="@color/white"
         android:elevation="4dp"
         android:textSize="16sp"
         android:textAllCaps="true"
+        android:textColor="@color/primaryTextColor"
         android:layout_gravity="center"/>
 
 

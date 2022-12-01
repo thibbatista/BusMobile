@@ -32,7 +32,7 @@ class ApiService()  {
         fun instancia(context: Context): Retrofit {
             if (::retrofit.isInitialized) return retrofit
             return Retrofit.Builder()
-                .baseUrl("https://aiko-olhovivo-proxy.aikodigital.io/")
+                .baseUrl("http://api.olhovivo.sptrans.com.br/v2.1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().also {
                     retrofit = it

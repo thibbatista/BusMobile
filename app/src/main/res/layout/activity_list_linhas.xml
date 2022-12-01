@@ -7,7 +7,7 @@
     android:theme="@style/Theme.Gmaps"
     tools:context=".ListLinhasAcitvity">
 
-    <include layout="@layout/tollbar"/>
+    <include layout="@layout/toolbar"/>
 
 
     <TextView
@@ -19,7 +19,6 @@
         android:text="Previsão de Horários"
         android:textSize="26dp"
         android:textStyle="bold"
-        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         />

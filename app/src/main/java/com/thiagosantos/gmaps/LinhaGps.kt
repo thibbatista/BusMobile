@@ -21,7 +21,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.thiagosantos.gmaps.adapter.MarkerInfoAdapter
+import com.thiagosantos.gmaps.adapter.MarkerLinha
 import com.thiagosantos.gmaps.helper.BitmapHelper
 import com.thiagosantos.gmaps.helper.LinhasHelper
 import com.thiagosantos.gmaps.model.LinhaRastreio
@@ -62,16 +62,6 @@ class LinhaGps : AppCompatActivity() {
            refreshCountDownPrevisao()
 
 
-//
-//                lifecycleScope.launch(Dispatchers.IO) {
-//
-//
-//
-//
-//
-//                }
-
-
         }
 
 
@@ -96,54 +86,9 @@ class LinhaGps : AppCompatActivity() {
             getLinhasIntent()
 
 
-
         } else {
             Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
         }
-
-
-
-
-
-//
-//        // time count down for 30 seconds,
-//        // with 1 second as countDown interval
-//        val timerCounter = object : CountDownTimer(30000, 1000) {
-//
-//            // Callback function, fired on regular interval
-//            override fun onTick(millisUntilFinished: Long) {
-//                println("seconds remaining: " + millisUntilFinished / 1000)
-//            }
-//
-//            // Callback function, fired
-//            // when the time is up
-//            override fun onFinish() {
-//                mMap.clear()
-//                println("done!")
-//                //getLinhasIntent()
-//                start()
-//
-////                    mMap.clear()
-////                    if (codigoParada != null) {
-////                        if (codigoLinha != null) {
-////                            getPrevisao(codigoParada , codigoLinha)
-////                        }
-////                    }
-//            }
-//
-//
-//        }
-//        timerCounter.start()
-//
-//        onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
-//            /* override back pressing */
-//            override fun handleOnBackPressed() {
-//                //Your code here
-//                println("ON BACK PRESSSEDDDD")
-//                timerCounter.cancel()
-//            }
-//        })
-
 
     }
 
@@ -264,24 +209,9 @@ class LinhaGps : AppCompatActivity() {
                     } else {
                         Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
                     }
-//                    println("getPrevisao")
-//                    mMap.clear()
-//                    getPrevisao(codigoParada, codigoLinha)
                 }
             }
         }
-//
-//
-//        if (checkForInternet(this)) {
-//            Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
-//
-//
-//
-//
-//
-//        } else {
-//            Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
-//        }
 
 
 
@@ -289,49 +219,6 @@ class LinhaGps : AppCompatActivity() {
         loadMap()
 
         timerCounter.start()
-//
-//
-//        // time count down for 30 seconds,
-//        // with 1 second as countDown interval
-//        val timerCounter = object : CountDownTimer(30000, 1000) {
-//
-//            // Callback function, fired on regular interval
-//            override fun onTick(millisUntilFinished: Long) {
-//                println("seconds remaining: " + millisUntilFinished / 1000)
-//            }
-//
-//            // Callback function, fired
-//            // when the time is up
-//            override fun onFinish() {
-//                mMap.clear()
-//                println("done!")
-//                //getLinhasIntent()
-//                start()
-//
-//
-//                if (codigoParada != null) {
-//                    if (codigoLinha != null) {
-//                        getPrevisao(codigoParada , codigoLinha)
-//                    }
-//                }
-//            }
-//
-//
-//        }
-//         timerCounter.start()
-
-//
-//        onBackPressedDispatcher.addCallback(object: OnBackPressedCallback(true) {
-//            /* override back pressing */
-//            override fun handleOnBackPressed() {
-//                //Your code here
-//                println("ON BACK PRESSSEDDDD")
-//                timerCounter.cancel()
-//
-//
-//            }
-//        })
-
     }
 
 
@@ -342,7 +229,7 @@ class LinhaGps : AppCompatActivity() {
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
 
-            googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
+            googleMap.setInfoWindowAdapter(MarkerLinha(this))
             addMarkersParadas(googleMap)
 
 
@@ -355,8 +242,8 @@ class LinhaGps : AppCompatActivity() {
 
                     bounds.include(
                         LatLng(
-                            it.parada.relacaoLinhas[0].relacaoVeiculos[0].latitudeVeiculo,
-                            it.parada.relacaoLinhas[0].relacaoVeiculos[0].longitudeVeiculo
+                            it.parada.relacaoLinhas[0].relacaoVeiculos[0].latitude,
+                            it.parada.relacaoLinhas[0].relacaoVeiculos[0].longitude
                         )
                     )
                     bounds.include(LatLng(it.parada.latitudeParada, it.parada.longitudeParada))
@@ -391,11 +278,10 @@ class LinhaGps : AppCompatActivity() {
                         BitmapHelper.vectorToBitmap(
                             this,
                             R.drawable.ic_bus_stop_icon,
-                            ContextCompat.getColor(this, R.color.teal_200)
+                            ContextCompat.getColor(this, R.color.paradaColor)
                         )
                     )
             )
-
 
 
             ponto.parada.relacaoLinhas.forEach { linhas ->
@@ -403,17 +289,22 @@ class LinhaGps : AppCompatActivity() {
 
                     val marker = mMap.addMarker(
                         MarkerOptions()
-                            .title(v.prefixoVeiculo)
+                            .title(v.prefixoVeiculo.toString())
                             .snippet(v.horarioPrevisto)
-                            .position(LatLng(v.latitudeVeiculo, v.longitudeVeiculo))
+                            .position(LatLng(v.latitude, v.longitude))
                             .icon(
                                 BitmapHelper.vectorToBitmap(
                                     this,
                                     R.drawable.ic_baseline_directions_bus_24,
-                                    ContextCompat.getColor(this, R.color.teal_200)
+                                    ContextCompat.getColor(this, R.color.onibusColor)
                                 )
                             )
                     )
+
+
+                    if (marker != null) {
+                        marker.tag = v
+                    }
 
 
                 }

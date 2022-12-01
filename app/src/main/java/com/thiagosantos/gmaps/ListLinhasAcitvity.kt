@@ -44,8 +44,6 @@ class ListLinhasAcitvity() : AppCompatActivity() {
 
 
 
-
-
         if (checkForInternet(this)) {
             Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
 
@@ -62,19 +60,6 @@ class ListLinhasAcitvity() : AppCompatActivity() {
 
 
 
-//
-//        val dados = intent.extras
-//        val codigoParada = dados?.getInt("parada")
-//
-//        Log.d("DEBUG", "Codigo da parada captura da acitivity Main: $codigoParada")
-//
-//        if (codigoParada != null) {
-//
-//            lifecycleScope.launch {
-//                getLinhas(codigoParada)
-//            }
-//        }
-
         listLinhas.observe(this) { linhasParadas ->
 
             listLinhasAdapter = ListLinhasAdapter(this, linhasParadas)
@@ -87,49 +72,6 @@ class ListLinhasAcitvity() : AppCompatActivity() {
             }
         }
     }
-//
-//    // overrride menu toolbar
-//
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//
-//        menuInflater.inflate(R.menu.main_menu, menu);
-//
-//        return super.onCreateOptionsMenu(menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//
-//        when (item.itemId) {
-//            R.id.shareButton -> {
-//
-//                getLinhasIntent()
-//
-//
-//               // Log.d("DEBUG", "Botao rfresh pressionado PAGINA LISTA ACTIVITY")
-//
-//                // para abrir tela de compartilhamento
-////                val sharingIntent = Intent(Intent.ACTION_SEND)
-////
-////                // type of the content to be shared
-////                sharingIntent.type = "text/plain"
-////
-////                // Body of the content
-////                val shareBody = "Your Body Here"
-////
-////                // subject of the content. you can share anything
-////                val shareSubject = "Your Subject Here"
-////
-////                // passing body of the content
-////                sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
-////
-////                // passing subject of the content
-////                sharingIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject)
-////                startActivity(Intent.createChooser(sharingIntent, "Share using"))
-//            }
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
 
     private fun getLinhasIntent(){
         val dados = intent.extras
@@ -177,10 +119,6 @@ class ListLinhasAcitvity() : AppCompatActivity() {
         }
     }
 
-    private fun refreshButtonIsPressed(item: Boolean): Boolean{
-        return item
-    }
-
 
     //pega todas as linhas de uma parada, com previsao de chegada
     private fun getLinhas(id: Int) {
@@ -188,14 +126,14 @@ class ListLinhasAcitvity() : AppCompatActivity() {
         try {
 
             lifecycleScope.launch {
-                //val codigo = id.toInt()
+
                 val response = ApiService.getLinhas(id)
 
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
                         listLinhas.postValue(body)
-                        //places.postValue(body.p.l)
+
 
                         Log.d(ContentValues.TAG, "Lista de Linhas por Parada-> Teste saída: ${body}")
                     }

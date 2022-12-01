@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="32dp">
+
+
+
+    <ImageView
+        android:id="@+id/iv_linha"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@color/secondaryDarkColor"
+        android:src="@drawable/ic_baseline_directions_bus_24"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_linha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3220"
+        android:textStyle="bold"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="24sp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="24dp"
+
+
+        />
+
+
+
+
+
+    <ImageView
+        android:id="@+id/time"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_baseline_access_time_24"
+        app:tint="@color/primaryTextColor"
+        android:background="@color/secondaryDarkColor"
+      />
+
+
+
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="14:07"
+        android:textStyle="bold"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="24sp"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"/>
+
+
+
+
+
+
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

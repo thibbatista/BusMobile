@@ -25,24 +25,19 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.thiagosantos.gmaps.adapter.MarkerInfoAdapter
 import com.thiagosantos.gmaps.helper.BitmapHelper
-import com.thiagosantos.gmaps.model.L
 import com.thiagosantos.gmaps.model.Parada
 import com.thiagosantos.gmaps.services.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.security.cert.X509Certificate
 import java.util.*
+import javax.security.cert.CertificateException
 
 class MainActivity() : AppCompatActivity() {
 
     private lateinit var mMap: GoogleMap
 
-    private val places = MutableLiveData<List<L>>()
-
     private val paradas = MutableLiveData<List<Parada>>()
-
-    //private val linhas = MutableLiveData<List<LinhasParadas>>()
-
-    private var localizacaoVeiculos: ((Posicao) -> Unit)? = null
 
     private val TAG = "DEBUG"
 
@@ -51,6 +46,10 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ApiService.instancia(applicationContext)
+
+
+
+
 
 
         loadApis()
@@ -68,8 +67,11 @@ class MainActivity() : AppCompatActivity() {
 
     private fun loadApis() {
 
+
+
         if (checkForInternet(this)) {
             Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
+
 
             lifecycleScope.launch(Dispatchers.IO) {
                 authKeyApi()
@@ -83,29 +85,6 @@ class MainActivity() : AppCompatActivity() {
             Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
         }
     }
-//
-//    // overrride menu toolbar
-//
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//
-//        menuInflater.inflate(R.menu.main_menu, menu);
-//
-//        return super.onCreateOptionsMenu(menu)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//
-//        when (item.itemId) {
-//            R.id.shareButton -> {
-//
-//                loadApis()
-//
-//            }
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
-
     private fun loadMap() {
 
 
@@ -115,10 +94,6 @@ class MainActivity() : AppCompatActivity() {
 
             googleMap.setInfoWindowAdapter(MarkerInfoAdapter(this))
             addMarkersParadas(googleMap)
-
-
-            // getAddress(LatLng(-23.516592, -46.698575))
-
 
             googleMap.setOnMapLoadedCallback {
                 val bounds = LatLngBounds.builder()
@@ -135,17 +110,6 @@ class MainActivity() : AppCompatActivity() {
 
         mapFragment.getMapAsync {
             it.setOnInfoWindowClickListener { marker ->
-                Log.d(TAG, "Marker id------------>>>>>>: ${marker.title}")
-                Log.d(TAG, "Nome da Parada------------>>>>>>: ${marker.snippet}")
-                Log.d(
-                    TAG,
-                    "endereço da localizacao=========>>>>>> " + getAddress(
-                        LatLng(
-                            -23.516592,
-                            -46.698575
-                        )
-                    )
-                )
 
                 marker.title?.let { it1 ->
                     marker.snippet?.let { it2 ->
@@ -155,8 +119,6 @@ class MainActivity() : AppCompatActivity() {
                         )
                     }
                 }
-
-
             }
         }
 
@@ -164,6 +126,17 @@ class MainActivity() : AppCompatActivity() {
 
 
     private suspend fun authKeyApi() {
+
+//
+//        @Throws(CertificateException::class)
+//        fun checkServerTrusted(chain: Array<X509Certificate>, authType: String?) {
+//            try {
+//                chain[0].checkValidity()
+//            } catch (e: java.lang.Exception) {
+//                throw CertificateException("Certificate not valid or trusted.")
+//            }
+//        }
+
         try {
             val response = ApiService.autenticar()
             val cookie = response.headers().get("Set-Cookie")
@@ -174,11 +147,23 @@ class MainActivity() : AppCompatActivity() {
             Log.d(TAG, "headers-debug: $cookie")
             Log.d(TAG, "API autenticada")
         } catch (e: Exception) {
-            Toast.makeText(
-                applicationContext,
-                "Hummm!, você está sem sinal de Internet.",
-                Toast.LENGTH_SHORT
-            ).show()
+
+            runOnUiThread {
+
+
+                Toast.makeText(
+                    applicationContext,
+                    "Hummm!, você está sem sinal de Internet.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+            }
+//
+//            Toast.makeText(
+//                applicationContext,
+//                "Hummm!, você está sem sinal de Internet.",
+//                Toast.LENGTH_SHORT
+//            ).show()
             Log.d(TAG, "API fora do ar: " + e.message)
         }
     }
@@ -268,7 +253,7 @@ class MainActivity() : AppCompatActivity() {
                             BitmapHelper.vectorToBitmap(
                                 this,
                                 R.drawable.ic_baseline_directions_bus_24,
-                                ContextCompat.getColor(this, R.color.teal_200)
+                                ContextCompat.getColor(this, R.color.paradaColor)
                             )
                         )
                 )
@@ -283,33 +268,20 @@ class MainActivity() : AppCompatActivity() {
 
     private fun checkForInternet(context: Context): Boolean {
 
-        // register activity with the connectivity manager service
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-        // if the android version is equal to M
-        // or greater we need to use the
-        // NetworkCapabilities to check what type of
-        // network has the internet connection
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-            // Returns a Network object corresponding to
-            // the currently active default data network.
             val network = connectivityManager.activeNetwork ?: return false
 
-            // Representation of the capabilities of an active network.
             val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
 
             return when {
-                // Indicates this network uses a Wi-Fi transport,
-                // or WiFi has network connectivity
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
 
-                // Indicates this network uses a Cellular transport. or
-                // Cellular has network connectivity
                 activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
 
-                // else return false
                 else -> false
             }
         } else {

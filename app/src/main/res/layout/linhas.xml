@@ -8,6 +8,7 @@
     android:layout_marginTop="24dp"
     android:clickable="true"
     android:focusable="true"
+    android:theme="@style/Theme.Gmaps"
     android:foreground="?selectableItemBackground">
 
 
@@ -19,7 +20,8 @@
         android:src="@drawable/ic_baseline_directions_bus_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/purple_700" />
+
+         />
 
     <ImageView
         android:id="@+id/icon_chair"
@@ -37,7 +39,7 @@
         android:layout_marginStart="8dp"
         android:text="118"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/icon_bus"
@@ -61,7 +63,7 @@
         android:layout_height="0dp"
         android:text="Próximos"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +77,7 @@
         android:layout_marginEnd="24dp"
         android:text="21:37"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/tv_next"
@@ -90,7 +92,7 @@
         android:layout_marginEnd="24dp"
         android:text="21:55"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/tv_hour1"
@@ -103,7 +105,7 @@
         android:layout_height="0dp"
         android:text="1 min"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +117,7 @@
         android:layout_height="0dp"
         android:text="as 21:29"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

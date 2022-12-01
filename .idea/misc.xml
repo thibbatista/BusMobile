@@ -22,15 +22,17 @@
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/activity_main.xml" value="0.2056159420289855" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card.xml" value="0.2359375" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card_details_line.xml" value="0.2359375" />
-        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card_line.xml" value="0.1" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card_line.xml" value="0.2" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/card_linha.xml" value="0.16" />
-        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/custon_marker_info.xml" value="0.2056159420289855" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/custon_marker_info.xml" value="0.536" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/info_linha.xml" value="0.24895833333333334" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/linha.xml" value="0.24895833333333334" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/linhas.xml" value="0.25" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/maps.xml" value="0.2359375" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/marker_linha.xml" value="0.4" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/tollbar.xml" value="0.536" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/tool.xml" value="0.25" />
+        <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/toolbar.xml" value="0.25" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/layout/top_app_bar.xml" value="0.25" />
         <entry key="..\:/projetos_kotlin/Gmaps/app/src/main/res/menu/main_menu.xml" value="0.24895833333333334" />
       </map>
