@@ -4,12 +4,10 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.thiagosantos.gmaps.databinding.LinhasBinding
 import com.thiagosantos.gmaps.helper.LinhasHelper
 import com.thiagosantos.gmaps.model.LinhasParadas
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -17,7 +15,7 @@ class ListLinhasAdapter(
     private val context: Context,
     private val linhasParadas: LinhasParadas,
 
-    var onItemClick : ((LinhasHelper) -> Unit)? = null
+    var onItemClick: ((LinhasHelper) -> Unit)? = null
 
 ) : RecyclerView.Adapter<MainViewHolder>() {
 
@@ -32,55 +30,44 @@ class ListLinhasAdapter(
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
         holder.itemView.setOnClickListener {
-            Log.d("TESTE DE CLICK", "TESTE CLICK RECYCLER VIEW")
 
-
-            linhasHelper = LinhasHelper(linhasParadas.parada.relacaoLinhas[position].letreiro,
+            linhasHelper = LinhasHelper(
+                linhasParadas.parada.relacaoLinhas[position].letreiro,
                 linhasParadas.parada.relacaoLinhas[position].codigoLinha,
                 linhasParadas.parada.codigoParada,
                 linhasParadas.parada.relacaoLinhas[position].destino,
                 linhasParadas.parada.relacaoLinhas[position].origem,
                 linhasParadas.parada.relacaoLinhas[position].sentido
 
-
             )
 
             onItemClick?.invoke(linhasHelper)
 
-        //linhasHelper.codigoLinha = linhasParadas.parada.relacaoLinhas[position].codigoLinha
-//        linhasHelper.destino = linhasParadas.parada.relacaoLinhas[position].destino
-//        linhasHelper.origem = linhasParadas.parada.relacaoLinhas[position].origem
-//        linhasHelper.sentido = linhasParadas.parada.relacaoLinhas[position].sentido
-//        linhasHelper.letreiro = linhasParadas.parada.relacaoLinhas[position].letreiro
-
-
         }
-//        linhasHelper.codigoLinha = linhasParadas.parada.relacaoLinhas[position].codigoLinha
-//        linhasHelper.destino = linhasParadas.parada.relacaoLinhas[position].destino
-//        linhasHelper.origem = linhasParadas.parada.relacaoLinhas[position].origem
-//        linhasHelper.sentido = linhasParadas.parada.relacaoLinhas[position].sentido
-//        linhasHelper.letreiro = linhasParadas.parada.relacaoLinhas[position].letreiro
 
-        val veiculos =  linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos
-        val horarioPrevisto = linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos[0].horarioPrevisto
+        val veiculos = linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos
+        val horarioPrevisto =
+            linhasParadas.parada.relacaoLinhas[position].relacaoVeiculos[0].horarioPrevisto
 
-        holder.codigoLinha.text = linhasParadas.parada.relacaoLinhas[position].codigoLinha.toString()
-        holder.letreiro.text =  linhasParadas.parada.relacaoLinhas[position].destino
+        holder.codigoLinha.text =
+            linhasParadas.parada.relacaoLinhas[position].codigoLinha.toString()
+        holder.letreiro.text = linhasParadas.parada.relacaoLinhas[position].destino
         holder.previsao.text = horarioPrevisto
-        holder.tempo.text = getDuracao(holder.currentDateAndTime, horarioPrevisto).toString() + " min"
+        holder.tempo.text =
+            getDuracao(holder.currentDateAndTime, horarioPrevisto).toString() + " min"
 
 
-        if (veiculos.isNotEmpty() && veiculos.size >= 2){
+        if (veiculos.isNotEmpty() && veiculos.size >= 2) {
             holder.prox1.text = veiculos[1].horarioPrevisto
 
-        }else {
+        } else {
             holder.prox1.text = null
         }
 
-        if (veiculos.isNotEmpty() && veiculos.size >= 3){
+        if (veiculos.isNotEmpty() && veiculos.size >= 3) {
             holder.prox2.text = veiculos[2].horarioPrevisto
 
-        }else {
+        } else {
             holder.prox2.text = null
         }
 
@@ -101,12 +88,9 @@ fun getDuracao(hour1: String, hour2: String): Long {
 
     val duracao = time2 - time1
 
-    Log.d("TIMEEEEEE----->>>>", "Resultado da subtracao de horas da funcao getDuracao--------->>>: ${duracao/60000}")
-
     return duracao / 60000
 
 }
-
 
 class MainViewHolder(binding: LinhasBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -116,7 +100,6 @@ class MainViewHolder(binding: LinhasBinding) : RecyclerView.ViewHolder(binding.r
     val prox2 = binding.tvHour2
     val previsao = binding.tvTimeHour
     val tempo = binding.tvTime
-    val iconeDeficiente = binding.iconChair
     val time = SimpleDateFormat("HH:mm")
     val currentDateAndTime = time.format(Date())
 

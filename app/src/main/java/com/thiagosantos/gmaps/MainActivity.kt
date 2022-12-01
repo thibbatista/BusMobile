@@ -25,20 +25,18 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.thiagosantos.gmaps.adapter.MarkerInfoAdapter
 import com.thiagosantos.gmaps.helper.BitmapHelper
+import com.thiagosantos.gmaps.helper.CheckInternet
 import com.thiagosantos.gmaps.model.Parada
 import com.thiagosantos.gmaps.services.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.security.cert.X509Certificate
 import java.util.*
-import javax.security.cert.CertificateException
 
 class MainActivity() : AppCompatActivity() {
 
+    private val checkInternet = CheckInternet()
     private lateinit var mMap: GoogleMap
-
     private val paradas = MutableLiveData<List<Parada>>()
-
     private val TAG = "DEBUG"
 
 
@@ -46,11 +44,6 @@ class MainActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ApiService.instancia(applicationContext)
-
-
-
-
-
 
         loadApis()
 
@@ -67,11 +60,7 @@ class MainActivity() : AppCompatActivity() {
 
     private fun loadApis() {
 
-
-
-        if (checkForInternet(this)) {
-            Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show()
-
+        if (checkInternet.checkForInternet(this)) {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 authKeyApi()
@@ -82,11 +71,13 @@ class MainActivity() : AppCompatActivity() {
 
 
         } else {
-            Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Hummm!, você está sem sinal de Internet.", Toast.LENGTH_LONG)
+                .show()
         }
     }
-    private fun loadMap() {
 
+
+    private fun loadMap() {
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map_fragment) as SupportMapFragment
@@ -102,7 +93,6 @@ class MainActivity() : AppCompatActivity() {
                     CameraUpdateFactory.newLatLngBounds(
                         bounds.build(),
                         100
-
                     )
                 )
             }
@@ -121,21 +111,10 @@ class MainActivity() : AppCompatActivity() {
                 }
             }
         }
-
     }
 
 
     private suspend fun authKeyApi() {
-
-//
-//        @Throws(CertificateException::class)
-//        fun checkServerTrusted(chain: Array<X509Certificate>, authType: String?) {
-//            try {
-//                chain[0].checkValidity()
-//            } catch (e: java.lang.Exception) {
-//                throw CertificateException("Certificate not valid or trusted.")
-//            }
-//        }
 
         try {
             val response = ApiService.autenticar()
@@ -149,21 +128,12 @@ class MainActivity() : AppCompatActivity() {
         } catch (e: Exception) {
 
             runOnUiThread {
-
-
                 Toast.makeText(
                     applicationContext,
                     "Hummm!, você está sem sinal de Internet.",
                     Toast.LENGTH_SHORT
                 ).show()
-
             }
-//
-//            Toast.makeText(
-//                applicationContext,
-//                "Hummm!, você está sem sinal de Internet.",
-//                Toast.LENGTH_SHORT
-//            ).show()
             Log.d(TAG, "API fora do ar: " + e.message)
         }
     }
@@ -221,8 +191,6 @@ class MainActivity() : AppCompatActivity() {
     }
 
 
-
-
 // intent
 
     private fun iniciaListLinhasActivity(parada: Int, endereco: String) {
@@ -265,33 +233,6 @@ class MainActivity() : AppCompatActivity() {
 
     }
 
-
-    private fun checkForInternet(context: Context): Boolean {
-
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            val network = connectivityManager.activeNetwork ?: return false
-
-            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-
-            return when {
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-
-                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-
-                else -> false
-            }
-        } else {
-            // if the android version is below M
-            @Suppress("DEPRECATION") val networkInfo =
-                connectivityManager.activeNetworkInfo ?: return false
-            @Suppress("DEPRECATION")
-            return networkInfo.isConnected
-        }
-    }
 }
 
 

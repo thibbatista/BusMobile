@@ -13,7 +13,6 @@ import com.thiagosantos.gmaps.model.Vs
 
 class MarkerLinha (private val context: Context) : GoogleMap.InfoWindowAdapter {
 
-
     override fun getInfoContents(marker: Marker): View? {
 
         val place = marker.tag as? Vs ?: return null
@@ -22,12 +21,9 @@ class MarkerLinha (private val context: Context) : GoogleMap.InfoWindowAdapter {
         view.findViewById<TextView>(R.id.tv_linha).text = place.prefixoVeiculo.toString()
         view.findViewById<TextView>(R.id.tv_time).text = place.horarioPrevisto
 
-
-
         return view
     }
 
     override fun getInfoWindow(marker: Marker): View? = null
-
 
 }

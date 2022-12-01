@@ -24,7 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Endereço da Parada"
-        android:textSize="16sp"
+        android:textColor="@color/secondaryTextColor"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/nomeParada"/>
@@ -37,6 +38,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="Listar linhas"
+        android:textColor="@color/primaryTextColor"
         android:padding="8dp"
         android:background="@color/primaryLightColor"
         android:textAllCaps="true"/>

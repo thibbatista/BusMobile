@@ -3,17 +3,15 @@ package com.thiagosantos.gmaps.services
 import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import com.thiagosantos.gmaps.Posicao
 import com.thiagosantos.gmaps.model.LinhaRastreio
 import com.thiagosantos.gmaps.model.LinhasParadas
 import com.thiagosantos.gmaps.model.Parada
-import com.thiagosantos.gmaps.model.Vs
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class ApiService()  {
+class ApiService() {
 
     companion object {
 
@@ -57,15 +55,11 @@ class ApiService()  {
             return olhoAutentica.autenticar(keyApiOlho)
         }
 
-        suspend fun getPosicoes(): Response<Posicao> {
-            return olhoVivoServices.getPosicoes(certificacao)
-        }
-
         suspend fun getParadas(nomeRua: String): Response<List<Parada>> {
             return olhoVivoServices.getParada(certificacao, nomeRua)
         }
 
-        suspend fun getLinhas(id: Int): Response<LinhasParadas>  {
+        suspend fun getLinhas(id: Int): Response<LinhasParadas> {
             return olhoVivoServices.getLinhas(certificacao, id)
         }
 

@@ -20,13 +20,10 @@ class MarkerInfoAdapter(private val context: Context) : GoogleMap.InfoWindowAdap
         view.findViewById<TextView>(R.id.nomeParada).text = place.nome
         view.findViewById<TextView>(R.id.enderecoParada).text = place.enderecoParada
 
-
-
         return view
     }
 
     override fun getInfoWindow(marker: Marker): View? = null
-
 
 }
 
