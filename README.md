@@ -1,7 +1,7 @@
 # Aplicativo Android - BusMobile
 
 
-Aplicativo Android para aplicativo que apresenta informações em tempo real do transporte público da cidade São Paulo
+Aplicativo Android que apresenta informações em tempo real do transporte público da cidade São Paulo
 
 
 ## Demonstração
