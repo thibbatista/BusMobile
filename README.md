@@ -1,8 +1,42 @@
 # Aplicativo Android - BusMobile
 
-![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto1.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto2.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto3.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto4.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto5.jpg) 
+ ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto4.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto5.jpg) 
 
 Aplicativo Android para aplicativo que apresenta informações em tempo real do transporte público da cidade São Paulo
+
+
+## Demonstração
+
+#### Utilização
+
+Para que diversas localidades possam testar o aplicativo, uma localização fixa foi adicionada.
+
+
+
+Clique em uma parada e irá exibir o nome da parada e o endereço. Na actionBar um letreiro exibe o endereço da localização.
+
+![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto1.jpg)
+
+
+Na tela principal contém todas as paradas em Markes customizados(icones vermelhos). Clique em listar linhas para exibir uma lista de todas as linhas que atende esta parada.
+
+
+
+Uma lista de todas as linhas que atende esta parada é exibida, nela contém o número da linha, o destino, se a linha é adaptada para deficientes, horários previsto das próximas linhas e quantidade de minutos restantes até a chegada do veículo.
+Clique sobre uma das linhas para rastrear todos os veículos desta linha.
+
+ ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto3.jpg)
+ 
+É exibido o numero da linha, a origem e o destino, clique da seta e arraste para cima.
+
+ ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto4.jpg)
+ 
+Dois marcadores são exibidos, um é correspondente ao local da parada e o icone(ônibus) corresponde à localização do veículo.
+Clique sobre o veículo e obterá o numero de veículo e horário previsto.
+A localização do veículo é atualizada a cada 30 segundos.
+
+![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto2.jpg)
+
 
 
 ## Funcionalidades
