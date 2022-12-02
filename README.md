@@ -19,7 +19,7 @@ Clique em uma parada e irá exibir o nome da parada e o endereço. Na actionBar 
 
 Na tela principal contém todas as paradas em Markes customizados(icones vermelhos). Clique em listar linhas para exibir uma lista de todas as linhas que atende esta parada.
 
-
+![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto2.jpg)
 
 Uma lista de todas as linhas que atende esta parada é exibida, nela contém o número da linha, o destino, se a linha é adaptada para deficientes, horários previsto das próximas linhas e quantidade de minutos restantes até a chegada do veículo.
 Clique sobre uma das linhas para rastrear todos os veículos desta linha.
