@@ -105,6 +105,8 @@ No Android Studio, com o botão direito sobre o projeto, vá em Build → Build 
 * RecyclerView
 * Retrofit
 * ViewModel
-* Glide
+* Fragment
+* googleMaps fragment
+
 
 
