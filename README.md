@@ -1,6 +1,5 @@
 # Aplicativo Android - BusMobile
 
- ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto4.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto5.jpg) 
 
 Aplicativo Android para aplicativo que apresenta informações em tempo real do transporte público da cidade São Paulo
 
@@ -35,7 +34,7 @@ Dois marcadores são exibidos, um é correspondente ao local da parada e o icone
 Clique sobre o veículo e obterá o numero de veículo e horário previsto.
 A localização do veículo é atualizada a cada 30 segundos.
 
-![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto2.jpg)
+![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto5.jpg)
 
 
 
