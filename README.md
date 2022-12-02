@@ -1,6 +1,6 @@
 # Aplicativo Android - BusMobile
 
-![](foto1.jpg) ![](foto2.jpg) ![](foto3.jpg) ![](foto4.jpg) ![](foto5.jpg) ![](foto6.jpg)
+![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto1.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto2.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto3.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto4.jpg) ![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/foto5.jpg) 
 
 Aplicativo Android para aplicativo que apresenta informações em tempo real do transporte público da cidade São Paulo
 
@@ -44,7 +44,7 @@ https://www.sptrans.com.br/desenvolvedores/api-do-olho-vivo-guia-de-referencia/d
 
 No arquivo AndroidManifest.xml adicione a chave das Api´s
 
-![](manifest.jpg)
+![]![](https://github.com/thibbatista/BusMobile/blob/main/fotosReadMe/manifest.png)
 
 
 #### Variáveis de ambiente
