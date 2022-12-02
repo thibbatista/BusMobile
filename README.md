@@ -18,7 +18,7 @@ Aplicativo Android para aplicativo que apresenta informações em tempo real do 
 
 Siga estas instruções para ter uma cópia do projeto funcionando em seu computador.
 
-> Caso não esteja interessado no desenvolvimento, vá para a página [Releases](https://github.com/thibbatista/CardView-with-Nested-RecyclerView/releases) e baixe e teste diretamento em seu celular android.
+> Caso não esteja interessado no desenvolvimento, vá para a página [Releases](https://github.com/thibbatista/BusMobile/releases) e baixe e teste diretamento em seu celular android.
 
 ### Pré-requisitos
 
