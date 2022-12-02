@@ -4,14 +4,15 @@
 
 Aplicativo Android para aplicativo que apresenta informações em tempo real do transporte público da cidade São Paulo
 
+
 ## Funcionalidades
 
-*Busca e localização de linhas
-*Busca e localização de paradas
-*Localização de veículos
-*Previsão de chegada dos veículos
-*Atualização em tempo real
-*Informações sobre linhas, paradas e veículos
+* Busca e localização de linhas
+* Busca e localização de paradas
+* Localização de veículos
+* Previsão de chegada dos veículos
+* Atualização em tempo real
+* Informações sobre linhas, paradas e veículos
 
 ## Primeiros Passos
 
